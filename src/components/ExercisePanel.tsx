@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { generateStageOne, allStagesExercises } from '@/data/exercises';
-import { allDurationStagesExercises } from '@/data/durationExercises';
+import { generateDurationStageOne, allDurationStagesExercises } from '@/data/durationExercises';
 import { allTimbreStagesExercises } from '@/data/timbreExercises';
 import { generateIntensityStageOne, allIntensityStagesExercises } from '@/data/intensityExercises';
 import { generateDensityStageOne, allDensityStagesExercises } from '@/data/densityExercises';
@@ -33,7 +33,8 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
     }
 
     if (activeNode === 'duracao') {
-      setStageExercises(allDurationStagesExercises.filter(ex => ex.stage === 1));
+      const dynamicDuration = generateDurationStageOne ? generateDurationStageOne() : allDurationStagesExercises;
+      setStageExercises(dynamicDuration);
     } else if (activeNode === 'timbre') {
       setStageExercises(allTimbreStagesExercises.filter(ex => ex.stage === 1));
     } else if (activeNode === 'intensidade') {
@@ -151,7 +152,7 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
     }
     setShowCompletionModal(false);
     if (activeNode === 'duracao') {
-      setStageExercises(allDurationStagesExercises.filter(ex => ex.stage === 1));
+      setStageExercises(generateDurationStageOne ? generateDurationStageOne() : allDurationStagesExercises);
     } else if (activeNode === 'timbre') {
       setStageExercises(allTimbreStagesExercises.filter(ex => ex.stage === 1));
     } else if (activeNode === 'intensidade') {
@@ -179,6 +180,16 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
     : isDensity
     ? (targetRaw === 'MAIS_DENSO' ? 'MAIS DENSO' : 'MENOS DENSO')
     : (targetRaw === 'AGUDA' ? 'AGUDA' : 'GRAVE');
+
+  // Rótulo amigável para as opções A e B
+  const getOptionLabel = (letter: string) => {
+    if (isTimbre) return `Som ${letter} é ${targetLabel}`;
+    if (isDensity) return `Som ${letter} é ${targetLabel.toLowerCase()}`;
+    if (isDuration) return `Som ${letter} é mais ${targetLabel.toLowerCase()}`;
+    if (isIntensity) return `Som ${letter} é mais ${targetLabel.toLowerCase()}`;
+    // Para Altura (AGUDA / GRAVE)
+    return `Som ${letter} é mais ${targetLabel === 'AGUDA' ? 'agudo' : 'grave'}`;
+  };
 
   return (
     <>
@@ -208,6 +219,8 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
                 <>Ouça os dois sons. Qual deles é o som de <span className="text-primary font-bold">{targetLabel}</span>?</>
               ) : isDensity ? (
                 <>Ouça os dois sons. Qual deles é o som <span className="text-primary font-bold">{targetLabel}</span>?</>
+              ) : isDuration ? (
+                <>Ouça os dois sons. Qual deles possui o som mais <span className="text-primary font-bold">{targetLabel}</span>?</>
               ) : (
                 <>Ouça os dois sons. Qual deles possui o som mais <span className="text-primary font-bold">{targetLabel}</span>?</>
               )}
@@ -244,22 +257,8 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
           {/* Opções de Resposta Dinâmicas */}
           <div className="flex flex-col gap-2.5 mb-6">
             {[
-              { 
-                id: 'A', 
-                label: isTimbre 
-                  ? `Som A é ${targetLabel}` 
-                  : isDensity 
-                  ? `Som A é ${targetLabel.toLowerCase()}` 
-                  : `Som A é mais ${targetLabel.toLowerCase()}` 
-              },
-              { 
-                id: 'B', 
-                label: isTimbre 
-                  ? `Som B é ${targetLabel}` 
-                  : isDensity 
-                  ? `Som B é ${targetLabel.toLowerCase()}` 
-                  : `Som B é mais ${targetLabel.toLowerCase()}` 
-              },
+              { id: 'A', label: getOptionLabel('A') },
+              { id: 'B', label: getOptionLabel('B') },
               { id: 'EQUAL', label: 'Ambos são iguais' }
             ].map((opt) => (
               <div

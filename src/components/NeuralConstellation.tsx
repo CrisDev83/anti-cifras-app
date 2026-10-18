@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface NeuralConstellationProps {
-  activeNode: 'altura' | 'duração' | 'timbre' | 'intensidade' | 'densidade';
-  onSelectNode: (node: 'altura' | 'duração' | 'timbre' | 'intensidade' | 'densidade') => void;
+  activeNode: 'altura' | 'duracao' | 'timbre' | 'intensidade' | 'densidade';
+  onSelectNode: (node: 'altura' | 'duracao' | 'timbre' | 'intensidade' | 'densidade') => void;
 }
 
 export function NeuralConstellation({ activeNode, onSelectNode }: NeuralConstellationProps) {
@@ -60,18 +60,18 @@ export function NeuralConstellation({ activeNode, onSelectNode }: NeuralConstell
 
         {/* Nó 2: Duração */}
         <div 
-          onClick={() => onSelectNode('duração')}
+          onClick={() => onSelectNode('duracao')}
           className="absolute z-10 flex flex-col items-center group cursor-pointer" 
           style={{ left: '50%', top: '22%', transform: 'translate(-50%, -50%)' }}
         >
-          <div className={`relative w-16 h-16 rounded-xl bg-surface-container/90 border-2 transition-all group-hover:scale-110 flex items-center justify-center ${activeNode === 'duração' ? 'border-primary shadow-[0_0_16px_rgba(76,215,246,0.4)]' : 'border-outline-variant/50 hover:border-tertiary/60'}`}>
-            <span className={`material-symbols-outlined text-2xl ${activeNode === 'duração' ? 'text-primary' : 'text-on-surface-variant group-hover:text-tertiary'}`}>timer</span>
+          <div className={`relative w-16 h-16 rounded-xl bg-surface-container/90 border-2 transition-all group-hover:scale-110 flex items-center justify-center ${activeNode === 'duracao' ? 'border-primary shadow-[0_0_16px_rgba(76,215,246,0.4)]' : 'border-outline-variant/50 hover:border-tertiary/60'}`}>
+            <span className={`material-symbols-outlined text-2xl ${activeNode === 'duracao' ? 'text-primary' : 'text-on-surface-variant group-hover:text-tertiary'}`}>timer</span>
             <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-surface-container-highest border border-outline-variant/40 text-on-surface-variant text-[10px] font-label-mono font-bold">0/5</span>
           </div>
           <div className="mt-2 flex flex-col items-center">
-            <span className={`text-xs font-title-sm font-bold tracking-wide text-center ${activeNode === 'duração' ? 'text-primary' : 'text-on-surface'}`}>Duração</span>
-            <span className={`text-[10px] font-caption-signal flex items-center gap-1 mt-0.5 ${activeNode === 'duração' ? 'text-tertiary' : 'text-on-surface-variant'}`}>
-              {activeNode === 'duração' ? '● Treinando' : 'Disponível'}
+            <span className={`text-xs font-title-sm font-bold tracking-wide text-center ${activeNode === 'duracao' ? 'text-primary' : 'text-on-surface'}`}>Duração</span>
+            <span className={`text-[10px] font-caption-signal flex items-center gap-1 mt-0.5 ${activeNode === 'duracao' ? 'text-tertiary' : 'text-on-surface-variant'}`}>
+              {activeNode === 'duracao' ? '● Treinando' : 'Disponível'}
             </span>
           </div>
         </div>

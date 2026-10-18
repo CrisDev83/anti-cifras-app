@@ -3,17 +3,14 @@ export interface Exercise {
   stage: number;
   questionNumber: number;
   title: string;
-  target: 'AGUDA' | 'GRAVE';
+  target: 'AGUDA' | 'GRAVE' | 'IGUAL';
   soundA: { label: string; src: string };
   soundB: { label: string; src: string };
-  correctAnswer: 'A' | 'B';
+  correctAnswer: 'A' | 'B' | 'EQUAL';
   difficulty: 'fácil' | 'médio' | 'difícil' | 'perito';
 }
 
 export const generateStageOne = (): Exercise[] => {
-  const exercises: Exercise[] = [];
-
-  // Pares temáticos coerentes com os nomes exatos dos arquivos
   const pairs = [
     {
       title: "Altura — Sons do Dia a Dia",
@@ -24,22 +21,35 @@ export const generateStageOne = (): Exercise[] => {
       title: "Altura — Sons do Dia a Dia",
       grave: '/audio/altura/motorGrave.mp3',
       agudo: '/audio/altura/motorAgudo.mp3'
+    },
+    {
+      title: "Altura — Sons do Dia a Dia",
+      grave: '/audio/timbre/rugidoLeao.mp3',
+      agudo: '/audio/timbre/miadoGato.mp3'
+    },
+    {
+      title: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/vozMasculina.mp3',
+      agudo: '/audio/altura/vozFeminina.mp3'
+    },
+    {
+      title: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/buzinaNavio.mp3',
+      agudo: '/audio/altura/buzinaMoto.mp3'
     }
   ];
 
-  for (let i = 1; i <= 5; i++) {
-    // Sorteia aleatoriamente entre Cães e Motores para esta questão
-    const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
+  const rawExercises: Omit<Exercise, 'id' | 'questionNumber'>[] = [];
 
-    // Sorteia se o som agudo fica no A ou no B
+  // 1. Criamos exatamente 16 exercícios de contraste normal
+  for (let i = 0; i < 16; i++) {
+    const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isAgudoA = Math.random() < 0.5;
     const srcA = isAgudoA ? randomPair.agudo : randomPair.grave;
     const srcB = isAgudoA ? randomPair.grave : randomPair.agudo;
-
-    // Sorteia se o objetivo é encontrar o mais AGUDO ou o mais GRAVE
     const askForAguda = Math.random() < 0.5;
     const target: 'AGUDA' | 'GRAVE' = askForAguda ? 'AGUDA' : 'GRAVE';
-
+    
     let correctAnswer: 'A' | 'B';
     if (askForAguda) {
       correctAnswer = isAgudoA ? 'A' : 'B';
@@ -47,10 +57,8 @@ export const generateStageOne = (): Exercise[] => {
       correctAnswer = isAgudoA ? 'B' : 'A';
     }
 
-    exercises.push({
-      id: i,
+    rawExercises.push({
       stage: 1,
-      questionNumber: i,
       title: randomPair.title,
       target,
       soundA: { label: "Som 01", src: srcA },
@@ -59,7 +67,33 @@ export const generateStageOne = (): Exercise[] => {
       difficulty: 'fácil'
     });
   }
-  return exercises;
+
+  // 2. Criamos exatamente 4 exercícios onde os sons são IGUAIS
+  for (let i = 0; i < 4; i++) {
+    const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
+    const useAgudo = Math.random() < 0.5;
+    const sameSrc = useAgudo ? randomPair.agudo : randomPair.grave;
+
+    rawExercises.push({
+      stage: 1,
+      title: randomPair.title,
+      target: 'IGUAL',
+      soundA: { label: "Som 01", src: sameSrc },
+      soundB: { label: "Som 02", src: sameSrc },
+      correctAnswer: 'EQUAL',
+      difficulty: 'fácil'
+    });
+  }
+
+  // 3. Baralhamos o array completo para que as questões iguais fiquem espalhadas ao acaso
+  const shuffled = rawExercises.sort(() => Math.random() - 0.5);
+
+  // 4. Atribuímos os IDs e números de questão definitivos (de 1 a 10)
+  return shuffled.map((ex, index) => ({
+    ...ex,
+    id: index + 1,
+    questionNumber: index + 1
+  }));
 };
 
 export const allStagesExercises: Exercise[] = generateStageOne();
