@@ -1,0 +1,94 @@
+export interface RitmoExercise {
+  id: number;
+  stage: number;
+  questionNumber: number;
+  title: string;
+  target: 'RITMO' | 'IGUAL';
+  soundA: { label: string; src: string };
+  soundB: { label: string; src: string };
+  correctAnswer: 'A' | 'B' | 'EQUAL';
+  difficulty: 'fácil' | 'médio' | 'difícil' | 'perito';
+}
+
+export const generateRitmoStageOne = (): RitmoExercise[] => {
+  // Pares focados no contraste entre Bateria (Ritmo) e Melodia
+  const pairs = [
+    {
+      title: "Ritmo — Elemento Ritmo",
+      bateria: '/audio/ritmo/bateraRock.mp3',
+      melodia: '/audio/melodia/melodiaFlauta.mp3'
+    },
+    {
+      title: "Ritmo — Elemento Ritmo",
+      bateria: '/audio/ritmo/bateraHipHop.mp3',
+      melodia: '/audio/harmonia/acordesPiano.mp3'
+    },
+    {
+      title: "Ritmo — Elemento Ritmo",
+      bateria: '/audio/ritmo/pandeiroSamba.mp3',
+      melodia: '/audio/melodia/soloGuitar.mp3'
+    },
+
+    {
+      title: "Ritmo — Elemento Ritmo",
+      bateria: '/audio/ritmo/bongo.mp3',
+      melodia: '/audio/melodia/melodiaAssobio.mp3'
+    },
+
+    {
+      title: "Ritmo — Elemento Ritmo",
+      bateria: '/audio/ritmo/beatboxRap.mp3',
+      melodia: '/audio/harmonia/acordesVocal.mp3'
+    }
+
+  ];
+
+  const rawExercises: Omit<RitmoExercise, 'id' | 'questionNumber'>[] = [];
+
+  // 1. Cria 4 exercícios de contraste (Bateria vs Melodia)
+  for (let i = 0; i < 4; i++) {
+    const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
+    const isBateriaA = Math.random() < 0.5;
+    const srcA = isBateriaA ? randomPair.bateria : randomPair.melodia;
+    const srcB = isBateriaA ? randomPair.melodia : randomPair.bateria;
+
+    let correctAnswer: 'A' | 'B' = isBateriaA ? 'A' : 'B';
+
+    rawExercises.push({
+      stage: 1,
+      title: randomPair.title,
+      target: 'RITMO',
+      soundA: { label: "Som 01", src: srcA },
+      soundB: { label: "Som 02", src: srcB },
+      correctAnswer,
+      difficulty: 'fácil'
+    });
+  }
+
+  // 2. Cria 1 exercício onde os sons são IGUAIS (ambos bateria ou ambos melodia)
+  const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
+  const useBateria = Math.random() < 0.5;
+  const sameSrc = useBateria ? randomPair.bateria : randomPair.melodia;
+
+  rawExercises.push({
+    stage: 1,
+    title: randomPair.title,
+    target: 'IGUAL',
+    soundA: { label: "Som 01", src: sameSrc },
+    soundB: { label: "Som 02", src: sameSrc },
+    correctAnswer: 'EQUAL',
+    difficulty: 'fácil'
+  });
+
+  // 3. Baralha o array completo para espalhar a questão igual ao acaso
+  const shuffled = rawExercises.sort(() => Math.random() - 0.5);
+
+  // 4. Atribui os IDs e números de questão definitivos
+  return shuffled.map((ex, index) => ({
+    ...ex,
+    id: index + 1,
+    questionNumber: index + 1
+  }));
+};
+
+export const allRitmoStagesExercises: RitmoExercise[] = generateRitmoStageOne();

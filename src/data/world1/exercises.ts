@@ -41,7 +41,7 @@ export const generateStageOne = (): Exercise[] => {
 
   const rawExercises: Omit<Exercise, 'id' | 'questionNumber'>[] = [];
 
-  // 1. Criamos exatamente 16 exercícios de contraste normal
+  // 1. Criamos os exercícios de contraste normal
   for (let i = 0; i < 16; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isAgudoA = Math.random() < 0.5;
@@ -68,7 +68,7 @@ export const generateStageOne = (): Exercise[] => {
     });
   }
 
-  // 2. Criamos exatamente 4 exercícios onde os sons são IGUAIS
+  // 2. Criamos os exercícios onde os sons são IGUAIS
   for (let i = 0; i < 4; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const useAgudo = Math.random() < 0.5;
@@ -85,10 +85,10 @@ export const generateStageOne = (): Exercise[] => {
     });
   }
 
-  // 3. Baralhamos o array completo para que as questões iguais fiquem espalhadas ao acaso
+  // 3. Baralhamos o array completo
   const shuffled = rawExercises.sort(() => Math.random() - 0.5);
 
-  // 4. Atribuímos os IDs e números de questão definitivos (de 1 a 10)
+  // 4. Atribuímos os IDs e números de questão definitivos com base no total gerado
   return shuffled.map((ex, index) => ({
     ...ex,
     id: index + 1,

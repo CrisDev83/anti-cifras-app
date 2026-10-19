@@ -1,18 +1,24 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { generateStageOne, allStagesExercises } from '@/data/exercises';
-import { generateDurationStageOne, allDurationStagesExercises } from '@/data/durationExercises';
-import { allTimbreStagesExercises } from '@/data/timbreExercises';
-import { generateIntensityStageOne, allIntensityStagesExercises } from '@/data/intensityExercises';
-import { generateDensityStageOne, allDensityStagesExercises } from '@/data/densityExercises';
+import React, { useState, useEffect } from 'react';
+import { 
+  generateStageOne, allStagesExercises,
+  generateDurationStageOne, allDurationStagesExercises,
+  allTimbreStagesExercises,
+  generateIntensityStageOne, allIntensityStagesExercises,
+  generateDensityStageOne, allDensityStagesExercises 
+} from '@/data/world1';
+import { allRitmoStagesExercises } from '@/data/world2/ritmo';
+import { allMelodiaStagesExercises } from '@/data/world2/melodia';
 import { StageCompletionModal } from '@/components/StageCompletionModal';
+import { playSound, stopCurrentAudio } from '@/utils/audioPlayer';
 
 interface ExercisePanelProps {
-  activeNode: 'altura' | 'duracao' | 'timbre' | 'intensidade' | 'densidade';
+  activeNode: string;
+  currentWorld?: 'world1' | 'world2';
 }
 
-export function ExercisePanel({ activeNode }: ExercisePanelProps) {
+export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExercisePanelProps) {
   const [stageExercises, setStageExercises] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -22,95 +28,59 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
-  const currentAudioSrcRef = useRef<string | null>(null);
+  // Função auxiliar para carregar os exercícios do nó ativo consoante o mundo
+  const fetchExercisesForNode = (world: string, node: string) => {
+    // Lógica do Mundo 2
+    if (world === 'world2') {
+      if (node === 'ritmo') {
+        return allRitmoStagesExercises;
+      }
+      if (node === 'melodia') {
+        return allMelodiaStagesExercises;
+      }
+      // Fallback amigável caso haja outro nó por implementar
+      return [
+        {
+          id: 1,
+          stage: 1,
+          questionNumber: 1,
+          title: `${node.toUpperCase()} — ETAPA 1`,
+          target: node.toUpperCase(),
+          soundA: { label: 'Som 01', src: '/audio/ritmo/bateraHipHop.mp3' },
+          soundB: { label: 'Som 02', src: '/audio/melodia/melodiaFlauta.mp3' },
+          correctAnswer: 'A'
+        }
+      ];
+    }
+
+    // Lógica original do Mundo 1
+    if (node === 'duracao') {
+      return generateDurationStageOne ? generateDurationStageOne() : allDurationStagesExercises;
+    } else if (node === 'timbre') {
+      return allTimbreStagesExercises.filter(ex => ex.stage === 1);
+    } else if (node === 'intensidade') {
+      return generateIntensityStageOne ? generateIntensityStageOne() : allIntensityStagesExercises;
+    } else if (node === 'densidade') {
+      return generateDensityStageOne ? generateDensityStageOne() : allDensityStagesExercises;
+    } else {
+      return generateStageOne ? generateStageOne() : allStagesExercises.filter(ex => ex.stage === 1);
+    }
+  };
 
   useEffect(() => {
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current = null;
-      currentAudioSrcRef.current = null;
-    }
-
-    if (activeNode === 'duracao') {
-      const dynamicDuration = generateDurationStageOne ? generateDurationStageOne() : allDurationStagesExercises;
-      setStageExercises(dynamicDuration);
-    } else if (activeNode === 'timbre') {
-      setStageExercises(allTimbreStagesExercises.filter(ex => ex.stage === 1));
-    } else if (activeNode === 'intensidade') {
-      setStageExercises(generateIntensityStageOne ? generateIntensityStageOne() : allIntensityStagesExercises);
-    } else if (activeNode === 'densidade') {
-      setStageExercises(generateDensityStageOne ? generateDensityStageOne() : allDensityStagesExercises);
-    } else {
-      const dynamicExercises = generateStageOne ? generateStageOne() : allStagesExercises.filter(ex => ex.stage === 1);
-      setStageExercises(dynamicExercises);
-    }
+    stopCurrentAudio();
+    const exercises = fetchExercisesForNode(currentWorld, activeNode);
+    setStageExercises(exercises);
     setCurrentIndex(0);
     setSelectedOption(null);
-  }, [activeNode]);
+  }, [activeNode, currentWorld]);
 
   const currentExercise = stageExercises[currentIndex];
+  const isWorld2 = currentWorld === 'world2';
   const isDuration = activeNode === 'duracao';
   const isTimbre = activeNode === 'timbre';
   const isIntensity = activeNode === 'intensidade';
   const isDensity = activeNode === 'densidade';
-
-  const playSound = (soundObj: any) => {
-    if (!soundObj) return;
-
-    if (soundObj.src) {
-      if (currentAudioRef.current) {
-        if (currentAudioSrcRef.current === soundObj.src) {
-          currentAudioRef.current.pause();
-          currentAudioRef.current.currentTime = 0;
-          currentAudioRef.current = null;
-          currentAudioSrcRef.current = null;
-          return;
-        }
-        currentAudioRef.current.pause();
-        currentAudioRef.current.currentTime = 0;
-        currentAudioRef.current = null;
-        currentAudioSrcRef.current = null;
-      }
-
-      const audio = new Audio(soundObj.src);
-      audio.volume = 1.0;
-      currentAudioRef.current = audio;
-      currentAudioSrcRef.current = soundObj.src;
-
-      audio.play().catch(err => {
-        console.error("Erro ao reproduzir o ficheiro de áudio:", err);
-      });
-
-      audio.onended = () => {
-        if (currentAudioRef.current === audio) {
-          currentAudioRef.current = null;
-          currentAudioSrcRef.current = null;
-        }
-      };
-      return;
-    }
-
-    const frequency = soundObj.freq || 440;
-    const duration = soundObj.duration || 1.0;
-    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-    osc.type = 'sine';
-
-    const now = audioCtx.currentTime;
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
-    gain.gain.setValueAtTime(0.2, now + duration - 0.1);
-    gain.gain.linearRampToValueAtTime(0, now + duration);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start(now);
-    osc.stop(now + duration);
-  };
 
   const handleVerify = () => {
     if (!selectedOption) {
@@ -118,11 +88,7 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
       return;
     }
 
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current = null;
-      currentAudioSrcRef.current = null;
-    }
+    stopCurrentAudio();
 
     if (selectedOption === currentExercise.correctAnswer) {
       setFeedback('Correto! +10 XP');
@@ -145,23 +111,9 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
   };
 
   const handleRestartStage = () => {
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current = null;
-      currentAudioSrcRef.current = null;
-    }
+    stopCurrentAudio();
     setShowCompletionModal(false);
-    if (activeNode === 'duracao') {
-      setStageExercises(generateDurationStageOne ? generateDurationStageOne() : allDurationStagesExercises);
-    } else if (activeNode === 'timbre') {
-      setStageExercises(allTimbreStagesExercises.filter(ex => ex.stage === 1));
-    } else if (activeNode === 'intensidade') {
-      setStageExercises(generateIntensityStageOne ? generateIntensityStageOne() : allIntensityStagesExercises);
-    } else if (activeNode === 'densidade') {
-      setStageExercises(generateDensityStageOne ? generateDensityStageOne() : allDensityStagesExercises);
-    } else if (generateStageOne) {
-      setStageExercises(generateStageOne());
-    }
+    setStageExercises(fetchExercisesForNode(currentWorld, activeNode));
     setCurrentIndex(0);
     setErrors(0);
     setLives(5);
@@ -171,7 +123,9 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
   if (!currentExercise) return null;
 
   const targetRaw = currentExercise.target; 
-  const targetLabel = isDuration 
+  const targetLabel = isWorld2
+    ? activeNode.toUpperCase()
+    : isDuration 
     ? (targetRaw === 'LONGO' ? 'LONGO' : 'CURTO')
     : isTimbre
     ? targetRaw
@@ -181,13 +135,12 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
     ? (targetRaw === 'MAIS_DENSO' ? 'MAIS DENSO' : 'MENOS DENSO')
     : (targetRaw === 'AGUDA' ? 'AGUDA' : 'GRAVE');
 
-  // Rótulo amigável para as opções A e B
   const getOptionLabel = (letter: string) => {
+    if (isWorld2) return `Som ${letter} representa o ${activeNode.toLowerCase()}`;
     if (isTimbre) return `Som ${letter} é ${targetLabel}`;
     if (isDensity) return `Som ${letter} é ${targetLabel.toLowerCase()}`;
     if (isDuration) return `Som ${letter} é mais ${targetLabel.toLowerCase()}`;
     if (isIntensity) return `Som ${letter} é mais ${targetLabel.toLowerCase()}`;
-    // Para Altura (AGUDA / GRAVE)
     return `Som ${letter} é mais ${targetLabel === 'AGUDA' ? 'agudo' : 'grave'}`;
   };
 
@@ -197,7 +150,7 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
         <div>
           <div className="flex justify-between items-center mb-4">
             <span className="text-caption-signal font-caption-signal text-primary font-bold uppercase tracking-wider">
-              {activeNode === 'duracao' ? 'DURAÇÃO' : activeNode.toUpperCase()} — ETAPA 1
+              {activeNode.toUpperCase()} — ETAPA 1
             </span>
             <div className="flex gap-1 text-sm">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -211,11 +164,12 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
             <span className="text-xs font-label-mono text-on-surface-variant">Exercício {currentExercise.questionNumber} de {stageExercises.length}</span>
           </div>
 
-          {/* Instrução Acústica Dinâmica */}
           <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/40 mb-5">
             <div className="text-caption-signal font-caption-signal text-on-surface-variant uppercase mb-1 font-semibold">INSTRUÇÃO ACÚSTICA</div>
             <div className="text-body-md font-body-md">
-              {isTimbre ? (
+              {isWorld2 ? (
+                <>Ouça os dois sons. Qual deles representa o <span className="text-primary font-bold">{targetLabel}</span>?</>
+              ) : isTimbre ? (
                 <>Ouça os dois sons. Qual deles é o som de <span className="text-primary font-bold">{targetLabel}</span>?</>
               ) : isDensity ? (
                 <>Ouça os dois sons. Qual deles é o som <span className="text-primary font-bold">{targetLabel}</span>?</>
@@ -227,7 +181,6 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
             </div>
           </div>
 
-          {/* Botões de Áudio A vs B */}
           <div className="grid grid-cols-2 gap-3 mb-5">
             <button 
               onClick={() => playSound(currentExercise.soundA)}
@@ -254,7 +207,6 @@ export function ExercisePanel({ activeNode }: ExercisePanelProps) {
             </button>
           </div>
 
-          {/* Opções de Resposta Dinâmicas */}
           <div className="flex flex-col gap-2.5 mb-6">
             {[
               { id: 'A', label: getOptionLabel('A') },

@@ -1,6 +1,10 @@
 import React from 'react';
 
-export function Header() {
+interface HeaderProps {
+  currentWorld: 'world1' | 'world2';
+}
+
+export function Header({ currentWorld }: HeaderProps) {
   return (
     <header className="bg-surface-container-lowest/85 backdrop-blur-md sticky top-0 z-40 border-b border-outline-variant/30">
       <div className="flex justify-between items-center w-full px-4 md:px-8 max-w-7xl mx-auto h-16">
@@ -17,7 +21,9 @@ export function Header() {
         <div className="hidden md:flex items-center">
           <button className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container/60 hover:bg-surface-container border border-outline-variant/40 text-on-surface transition-colors cursor-pointer">
             <span className="w-2 h-2 rounded-full bg-primary animate-ping"></span>
-            <span className="text-label-mono font-label-mono text-on-surface font-semibold tracking-wide">Mundo 1: Propriedades do Som</span>
+            <span className="text-label-mono font-label-mono text-on-surface font-semibold tracking-wide">
+              {currentWorld === 'world1' ? 'Mundo 1: Propriedades do Som' : 'Mundo 2: Elementos da Música'}
+            </span>
           </button>
         </div>
 
