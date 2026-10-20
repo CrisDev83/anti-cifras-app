@@ -15,26 +15,40 @@ export const generateMelodiaStageOne = (): MelodiaExercise[] => {
   const pairs = [
     {
       title: "Melodia — Elemento Melodia",
-      melodia: '/audio/melodia/melodiaFlauta.mp3', 
-      outro: '/audio/ritmo/pandeiroSamba.mp3'   
+      melodia: '/audio/melodia/notaPiano.mp3', 
+      outro: '/audio/ritmo/toqueBongo.mp3'   
     },
     {
       title: "Melodia — Elemento Melodia",
-      melodia: '/audio/melodia/soloGuitar.mp3', 
-      outro: '/audio/ritmo/bongo.mp3'     
+      melodia: '/audio/melodia/notaVocal.mp3', 
+      outro: '/audio/harmonia/acordeVocal.mp3'     
     },
+
     {
       title: "Melodia — Elemento Melodia",
-      melodia: '/audio/melodia/melodiaAssobio.mp3', 
-      outro: '/audio/harmonia/acordesVocal.mp3'  
+      melodia: '/audio/melodia/notaViolao.mp3', 
+      outro: '/audio/ritmo/palmaIsolada.mp3'  
     },
+    
+    {
+      title: "Melodia — Elemento Melodia",
+      melodia: '/audio/melodia/notaSino.mp3', 
+      outro: '/audio/ritmo/toqueCaixa.mp3'  
+    },
+
+    {
+      title: "Melodia — Elemento Melodia",
+      melodia: '/audio/melodia/notaSax.mp3', 
+      outro: '/audio/harmonia/harmoniaMetais.mp3'  
+    },
+
     
   ];
 
   const rawExercises: Omit<MelodiaExercise, 'id' | 'questionNumber'>[] = [];
 
   // 1. Cria 4 exercícios de contraste (Melodia vs Outro)
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 16; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isMelodiaA = Math.random() < 0.5;
     const srcA = isMelodiaA ? randomPair.melodia : randomPair.outro;
@@ -54,6 +68,7 @@ export const generateMelodiaStageOne = (): MelodiaExercise[] => {
   }
 
   // 2. Cria 1 exercício onde os sons são IGUAIS (ambos melodia ou ambos não-melodia)
+  for (let i = 0; i < 4; i++) {
   const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
   const useMelodia = Math.random() < 0.5;
   const sameSrc = useMelodia ? randomPair.melodia : randomPair.outro;
@@ -67,6 +82,7 @@ export const generateMelodiaStageOne = (): MelodiaExercise[] => {
     correctAnswer: 'EQUAL',
     difficulty: 'fácil'
   });
+}
 
   // 3. Baralha o array completo
   const shuffled = rawExercises.sort(() => Math.random() - 0.5);

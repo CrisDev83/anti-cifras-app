@@ -10,6 +10,7 @@ import {
 } from '@/data/world1';
 import { allRitmoStagesExercises } from '@/data/world2/ritmo';
 import { allMelodiaStagesExercises } from '@/data/world2/melodia';
+import { allHarmoniaStagesExercises } from '@/data/world2/harmonia'; // <-- Importado
 import { StageCompletionModal } from '@/components/StageCompletionModal';
 import { playSound, stopCurrentAudio } from '@/utils/audioPlayer';
 
@@ -32,25 +33,16 @@ export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExerciseP
   const fetchExercisesForNode = (world: string, node: string) => {
     // Lógica do Mundo 2
     if (world === 'world2') {
-      if (node === 'ritmo') {
-        return allRitmoStagesExercises;
+      switch (node) {
+        case 'ritmo':
+          return allRitmoStagesExercises;
+        case 'melodia':
+          return allMelodiaStagesExercises;
+        case 'harmonia':
+          return allHarmoniaStagesExercises; // <-- Adicionado corretamente
+        default:
+          return [];
       }
-      if (node === 'melodia') {
-        return allMelodiaStagesExercises;
-      }
-      // Fallback amigável caso haja outro nó por implementar
-      return [
-        {
-          id: 1,
-          stage: 1,
-          questionNumber: 1,
-          title: `${node.toUpperCase()} — ETAPA 1`,
-          target: node.toUpperCase(),
-          soundA: { label: 'Som 01', src: '/audio/ritmo/bateraHipHop.mp3' },
-          soundB: { label: 'Som 02', src: '/audio/melodia/melodiaFlauta.mp3' },
-          correctAnswer: 'A'
-        }
-      ];
     }
 
     // Lógica original do Mundo 1
@@ -122,6 +114,23 @@ export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExerciseP
 
   if (!currentExercise) return null;
 
+  // Textos dinâmicos ajustados para o Mundo 2 (Opção B)
+  const getWorld2Instruction = () => {
+    if (currentExercise.target === 'IGUAL') {
+      return "Ouça os dois sons. Eles são IGUAIS ou DIFERENTES?";
+    }
+    switch (activeNode) {
+      case 'ritmo':
+        return <>Ouça os dois sons. Qual deles é um <span className="text-primary font-bold">SOM PERCUSSIVO</span>?</>;
+      case 'melodia':
+        return <>Ouça os dois sons. Qual deles é uma <span className="text-primary font-bold">NOTA SÓ</span>?</>;
+      case 'harmonia':
+        return <>Ouça os dois sons. Qual deles traz <span className="text-primary font-bold">VÁRIAS NOTAS JUNTAS</span>?</>;
+      default:
+        return <>Ouça os dois sons e escolha a resposta correta.</>;
+    }
+  };
+
   const targetRaw = currentExercise.target; 
   const targetLabel = isWorld2
     ? activeNode.toUpperCase()
@@ -136,7 +145,10 @@ export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExerciseP
     : (targetRaw === 'AGUDA' ? 'AGUDA' : 'GRAVE');
 
   const getOptionLabel = (letter: string) => {
-    if (isWorld2) return `Som ${letter} representa o ${activeNode.toLowerCase()}`;
+    if (isWorld2) {
+      if (letter === 'EQUAL') return 'Ambos são iguais';
+      return `O Som ${letter} é o alvo correto`;
+    }
     if (isTimbre) return `Som ${letter} é ${targetLabel}`;
     if (isDensity) return `Som ${letter} é ${targetLabel.toLowerCase()}`;
     if (isDuration) return `Som ${letter} é mais ${targetLabel.toLowerCase()}`;
@@ -168,7 +180,7 @@ export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExerciseP
             <div className="text-caption-signal font-caption-signal text-on-surface-variant uppercase mb-1 font-semibold">INSTRUÇÃO ACÚSTICA</div>
             <div className="text-body-md font-body-md">
               {isWorld2 ? (
-                <>Ouça os dois sons. Qual deles representa o <span className="text-primary font-bold">{targetLabel}</span>?</>
+                getWorld2Instruction()
               ) : isTimbre ? (
                 <>Ouça os dois sons. Qual deles é o som de <span className="text-primary font-bold">{targetLabel}</span>?</>
               ) : isDensity ? (

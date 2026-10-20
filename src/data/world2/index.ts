@@ -1,4 +1,8 @@
 export * from './config';
-// No futuro, podes adicionar aqui os re-exports dos exercícios do Mundo 2:
-// export * from './ritmoExercises';
-// export * from './melodiaExercises';
+
+// Re-exporta todos os exercícios e funções do nó de Harmonia
+export * from './harmonia';
+
+// Futuramente, podes adicionar os outros nós à medida que forem criados:
+// export * from './melodia';
+// export * from './ritmo';
