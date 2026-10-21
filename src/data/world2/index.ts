@@ -1,8 +1,33 @@
-export * from './config';
+import { allRitmoStagesExercises } from './ritmo';
+import { allMelodiaStagesExercises } from './melodia';
+import { allHarmoniaStagesExercises } from './harmonia';
 
-// Re-exporta todos os exercícios e funções do nó de Harmonia
-export * from './harmonia';
-
-// Futuramente, podes adicionar os outros nós à medida que forem criados:
-// export * from './melodia';
-// export * from './ritmo';
+export const world2Nodes = [
+  { 
+    id: 'ritmo', 
+    label: 'Ritmo', 
+    icon: 'music_note', 
+    left: '25%', 
+    top: '40%', 
+    progress: '1/5',
+    exercises: allRitmoStagesExercises 
+  },
+  { 
+    id: 'melodia', 
+    label: 'Melodia', 
+    icon: 'audiotrack', 
+    left: '75%', 
+    top: '40%', 
+    progress: '0/5',
+    exercises: allMelodiaStagesExercises 
+  },
+  { 
+    id: 'harmonia', 
+    label: 'Harmonia', 
+    icon: 'queue_music', 
+    left: '50%', 
+    top: '75%', 
+    progress: '0/5',
+    exercises: allHarmoniaStagesExercises 
+  },
+];
