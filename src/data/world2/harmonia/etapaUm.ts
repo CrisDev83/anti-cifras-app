@@ -1,14 +1,5 @@
-export interface HarmoniaExercise {
-  id: number;
-  stage: number;
-  questionNumber: number;
-  title: string;
-  target: 'HARMONIA' | 'IGUAL';
-  soundA: { label: string; src: string };
-  soundB: { label: string; src: string };
-  correctAnswer: 'A' | 'B' | 'EQUAL';
-  difficulty: 'fácil' | 'médio' | 'difícil' | 'perito';
-}
+
+import { HarmoniaExercise } from './types';
 
 export const generateHarmoniaStageOne = (): HarmoniaExercise[] => {
   // 5 Pares focados no contraste entre Harmonia (Bloco Sonoro / Acordes) e Não-Harmonia (Percussão / Nota Solo)

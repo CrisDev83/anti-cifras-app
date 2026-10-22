@@ -25,9 +25,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-surface-container-lowest text-on-surface antialiased min-h-screen">
-        {children}
-      </body>
+      <body
+  className="bg-surface-container-lowest text-on-surface antialiased min-h-screen"
+  suppressHydrationWarning
+>
+  {children}
+</body>
     </html>
   );
 }
