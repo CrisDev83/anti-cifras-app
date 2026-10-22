@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { StageCompletionModal } from '@/components/StageCompletionModal';
 import { useExerciseSession } from '@/hooks/useExerciseSession';
 import { getTargetLabel, getOptionLabel } from '@/utils/exerciseHelpers';
@@ -14,6 +14,11 @@ interface ExercisePanelProps {
 export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExercisePanelProps) {
   // 1. Estado para a etapa selecionada no seletor (E1 ou E2)
   const [selectedStage, setSelectedStage] = useState<number>(1);
+
+  // Redefine para a Etapa 1 sempre que o mundo ou o nó ativo mudar
+  useEffect(() => {
+    setSelectedStage(1);
+  }, [currentWorld, activeNode]);
 
   const isWorld2 = currentWorld === 'world2';
 
@@ -64,10 +69,7 @@ export function ExercisePanel({ activeNode, currentWorld = 'world1' }: ExerciseP
 
   const renderInstruction = () => {
     if (isWorld2) {
-      if (activeExercise.target === 'IGUAL') {
-        return "Ouça os dois sons. Eles são IGUAIS ou DIFERENTES?";
-      }
-      switch (activeNode) {
+        switch (activeNode) {
         case 'ritmo':
           if (selectedStage === 2) {
             return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">RITMO</span>?</>;
