@@ -1,6 +1,6 @@
-import { allRitmoStagesExercises } from '@/data/world2/ritmo';
-import { allMelodiaStagesExercises } from '@/data/world2/melodia';
-import { allHarmoniaStagesExercises } from '@/data/world2/harmonia';
+import { allRitmoStagesExercises } from '@/data/mundo2/ritmo';
+import { allMelodiaStagesExercises } from '@/data/mundo2/melodia';
+import { allHarmoniaStagesExercises } from '@/data/mundo2/harmonia';
 
 export const fetchWorld2Exercises = (node: string) => {
   switch (node) {

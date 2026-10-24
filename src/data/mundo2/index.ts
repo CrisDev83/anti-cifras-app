@@ -2,7 +2,7 @@ import { allRitmoStagesExercises } from './ritmo';
 import { allMelodiaStagesExercises } from './melodia';
 import { allHarmoniaStagesExercises } from './harmonia';
 
-export const world2Nodes = [
+export const nosMundo2 = [
   { 
     id: 'ritmo', 
     label: 'Ritmo', 

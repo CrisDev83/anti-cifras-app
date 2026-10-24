@@ -5,10 +5,15 @@ let currentAudioSrc: string | null = null;
 export function playSound(soundObj: any) {
   if (!soundObj) return;
 
-  // Se o som for baseado num ficheiro de áudio (src)
-  if (soundObj.src) {
+  // Extrai o caminho do áudio de forma flexível (suporta src, fonte, file, audio ou string direta)
+  const audioSrc = typeof soundObj === 'string' 
+    ? soundObj 
+    : (soundObj.src || soundObj.fonte || soundObj.file || soundObj.audio);
+
+  // Se encontrou um caminho de áudio válido
+  if (audioSrc) {
     if (currentAudio) {
-      if (currentAudioSrc === soundObj.src) {
+      if (currentAudioSrc === audioSrc) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
         currentAudio = null;
@@ -21,13 +26,13 @@ export function playSound(soundObj: any) {
       currentAudioSrc = null;
     }
 
-    const audio = new Audio(soundObj.src);
+    const audio = new Audio(audioSrc);
     audio.volume = 1.0;
     currentAudio = audio;
-    currentAudioSrc = soundObj.src;
+    currentAudioSrc = audioSrc;
 
     audio.play().catch(err => {
-      console.error("Erro ao reproduzir o ficheiro de áudio:", err);
+      console.error("Erro ao reproduzir o ficheiro de áudio:", err, "Caminho tentado:", audioSrc);
     });
 
     audio.onended = () => {
@@ -39,7 +44,7 @@ export function playSound(soundObj: any) {
     return;
   }
 
-  // Caso contrário, usa a síntese por frequência (Web Audio API)
+  // Caso contrário, usa a síntese por frequência (Web Audio API) como fallback
   const frequency = soundObj.freq || 440;
   const duration = soundObj.duration || 1.0;
   

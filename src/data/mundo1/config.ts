@@ -1,4 +1,4 @@
-export interface NodeConfig {
+export interface ConfiguracaoNo {
   id: 'altura' | 'duracao' | 'timbre' | 'intensidade' | 'densidade';
   label: string;
   icon: string;
@@ -7,7 +7,7 @@ export interface NodeConfig {
   progress: string;
 }
 
-export const world1Nodes: NodeConfig[] = [
+export const nosMundo1: ConfiguracaoNo[] = [
   {
     id: 'altura',
     label: 'Altura (Pitch)',

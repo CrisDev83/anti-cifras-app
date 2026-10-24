@@ -2,18 +2,18 @@
 
 import React from 'react';
 
-interface StageCompletionModalProps {
-  isOpen: boolean;
-  errors: number;
-  totalExercises: number;
-  onRestart: () => void;
+interface PropsModeloEtapaCompleta {
+  estaAberto: boolean;
+  erros: number;
+  totalExercicios: number;
+  aoReiniciar: () => void;
 }
 
-export function StageCompletionModal({ isOpen, errors, totalExercises, onRestart }: StageCompletionModalProps) {
-  if (!isOpen) return null;
+export function ModeloEtapaCompleta({ estaAberto, erros, totalExercicios, aoReiniciar }: PropsModeloEtapaCompleta) {
+  if (!estaAberto) return null;
 
-  const correctAnswers = totalExercises - errors;
-  const accuracy = Math.round((correctAnswers / totalExercises) * 100);
+  const respostasCertas = totalExercicios - erros;
+  const precisao = Math.round((respostasCertas / totalExercicios) * 100);
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -36,20 +36,20 @@ export function StageCompletionModal({ isOpen, errors, totalExercises, onRestart
         <div className="grid grid-cols-3 gap-3 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 mb-6">
           <div className="flex flex-col">
             <span className="text-[10px] text-on-surface-variant uppercase font-label-mono">Acertos</span>
-            <span className="text-lg font-bold text-emerald-400">{correctAnswers}/{totalExercises}</span>
+            <span className="text-lg font-bold text-emerald-400">{respostasCertas}/{totalExercicios}</span>
           </div>
           <div className="flex flex-col border-x border-outline-variant/30">
             <span className="text-[10px] text-on-surface-variant uppercase font-label-mono">Erros</span>
-            <span className="text-lg font-bold text-rose-400">{errors}</span>
+            <span className="text-lg font-bold text-rose-400">{precisao}</span>
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] text-on-surface-variant uppercase font-label-mono">Precisão</span>
-            <span className="text-lg font-bold text-yellow-400">{accuracy}%</span>
+            <span className="text-lg font-bold text-yellow-400">{precisao}%</span>
           </div>
         </div>
 
         <button
-          onClick={onRestart}
+          onClick={aoReiniciar}
           className="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-bold text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:brightness-110 transition-all cursor-pointer"
         >
           CONTINUAR TREINO

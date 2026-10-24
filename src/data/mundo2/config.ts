@@ -1,4 +1,4 @@
-export interface World2NodeConfig {
+export interface ConfigNosMundo2 {
   id: 'ritmo' | 'melodia' | 'harmonia';
   label: string;
   icon: string;
@@ -7,7 +7,7 @@ export interface World2NodeConfig {
   progress: string;
 }
 
-export const world2Nodes: World2NodeConfig[] = [
+export const world2Nodes: ConfigNosMundo2[] = [
 
   {
     id: 'ritmo',

@@ -16,7 +16,7 @@ export const generateRitmoStageOne = (): RitmoExercise[] => {
     {
       title: "Ritmo — Elemento Ritmo",
       bateria: '/audio/ritmo/golpeCaixa.mp3',
-      melodia: '/audio/melodia/notaGuitar.mp3'
+      melodia: '/audio/melodia/notaViolao.mp3'
     },
 
     {
