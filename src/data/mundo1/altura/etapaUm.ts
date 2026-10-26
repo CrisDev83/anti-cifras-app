@@ -3,29 +3,29 @@ import { ExercicioAltura } from './types';
 export const gerarEtapaUmAltura = (): ExercicioAltura[] => {
   const pares = [
     {
-      titulo: "Altura — Sons do Dia a Dia (E1)",
-      grave: '/audio/altura/latidoGrave.mp3',
-      agudo: '/audio/altura/latidoAgudo.mp3'
+      titulo: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/etapa1/latidoGrave.mp3',
+      agudo: '/audio/altura/etapa1/latidoAgudo.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia (E1)",
-      grave: '/audio/altura/motorGrave.mp3',
-      agudo: '/audio/altura/motorAgudo.mp3'
+      titulo: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/etapa1/motorGrave.mp3',
+      agudo: '/audio/altura/etapa1/motorAgudo.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia (E1)",
-      grave: '/audio/timbre/rugidoLeao.mp3',
-      agudo: '/audio/timbre/miadoGato.mp3'
+      titulo: "Altura — Sons do Dia a Dia",
+      grave: '/audio/timbre/etapa1/rugidoLeao.mp3',
+      agudo: '/audio/timbre/etapa1/miadoGato.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia (E1)",
-      grave: '/audio/altura/vozMasculina.mp3',
-      agudo: '/audio/altura/vozFeminina.mp3'
+      titulo: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/etapa1/vozMasculina.mp3',
+      agudo: '/audio/altura/etapa1/vozFeminina.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia (E1)",
-      grave: '/audio/altura/buzinaNavio.mp3',
-      agudo: '/audio/altura/buzinaMoto.mp3'
+      titulo: "Altura — Sons do Dia a Dia",
+      grave: '/audio/altura/etapa1/buzinaNavio.mp3',
+      agudo: '/audio/altura/etapa1/buzinaMoto.mp3'
     }
   ];
 
@@ -70,7 +70,7 @@ export const gerarEtapaUmAltura = (): ExercicioAltura[] => {
       alvo: 'IGUAL',
       somA: { rotulo: "Som 01", src: mesmaFonte },
       somB: { rotulo: "Som 02", src: mesmaFonte },
-      respostaCorreta: 'IGUAL',
+      respostaCorreta: 'EQUAL',
       dificuldade: 'fácil'
     });
   }

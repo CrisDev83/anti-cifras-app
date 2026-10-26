@@ -6,6 +6,6 @@ export interface ExercicioAltura {
   alvo: 'AGUDA' | 'GRAVE' | 'IGUAL';
   somA: { rotulo: string; src: string };
   somB: { rotulo: string; src: string };
-  respostaCorreta: 'A' | 'B' | 'IGUAL';
+  respostaCorreta: 'A' | 'B' | 'EQUAL';
   dificuldade: 'fácil' | 'médio' | 'difícil' | 'perito';
 }

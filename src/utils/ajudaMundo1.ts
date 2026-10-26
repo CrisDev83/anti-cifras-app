@@ -5,23 +5,29 @@ import {
   gerarEtapaUmIntensidade, todosExerciciosIntensidade,
   gerarEtapaUmDensidade, todosExerciciosEtapasDensidade 
 } from '@/data/mundo1';
+// Importa também o gerador da etapa 2 de altura (ou o agregado)
+import { gerarEtapaDoisAltura } from '@/data/mundo1/altura/etapaDois'; // Ajusta o caminho se necessário
 
 export const buscarExerciciosParaNo = (no: string) => {
   if (no === 'duracao') {
     return gerarEtapaUmDuracao ? gerarEtapaUmDuracao() : todosExerciciosEtapaDuracao;
   } else if (no === 'timbre') {
-    return todosExerciciosEtapasTimbre.filter((ex: any) => ex.etapa === 1);
+    // Se quiseres abrir o timbre para outras etapas no futuro, podes remover o .filter(ex => ex.etapa === 1) ou deixá-lo se a etapa 2 ainda não existir
+    return todosExerciciosEtapasTimbre; 
   } else if (no === 'intensidade') {
     return gerarEtapaUmIntensidade ? gerarEtapaUmIntensidade() : todosExerciciosIntensidade;
   } else if (no === 'densidade') {
     return gerarEtapaUmDensidade ? gerarEtapaUmDensidade() : todosExerciciosEtapasDensidade;
   } else {
-    return gerarEtapaUmAltura ? gerarEtapaUmAltura() : todosExerciciosEtapaAltura.filter(ex => ex.etapa === 1);
+    // Para a ALTURA, juntamos a Etapa 1 e a Etapa 2 para o hook conseguir filtrar a que o utilizador escolheu!
+    const exerciciosEtapa1 = gerarEtapaUmAltura ? gerarEtapaUmAltura() : [];
+    const exerciciosEtapa2 = gerarEtapaDoisAltura ? gerarEtapaDoisAltura() : [];
+    
+    return [...exerciciosEtapa1, ...exerciciosEtapa2];
   }
 };
 
 export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
-  // Suporta tanto 'alvo' (geradores novos) quanto 'target' (legado)
   const alvoBruto = exercicio?.alvo || exercicio?.target;
   switch (noAtivo) {
     case 'duracao':
