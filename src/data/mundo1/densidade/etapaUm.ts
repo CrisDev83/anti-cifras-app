@@ -4,28 +4,28 @@ export const gerarEtapaUmDensidade = (): ExercicioDensidade[] => {
   const par = [
     {
       titulo: "Densidade — Sons do Dia a Dia",
-      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/pingo.mp3' },
-      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/chuva.mp3' }
+      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/etapa1/pingo.mp3' },
+      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/etapa1/chuva.mp3' }
     },
     {
       titulo: "Densidade — Sons do Dia a Dia",
-      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/sapoUm.mp3' },
-      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/sapoCoro.mp3' }
+      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/etapa1/sapoUm.mp3' },
+      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/etapa1/sapoCoro.mp3' }
     },
     {
       titulo: "Densidade — Sons do Dia a Dia",
-      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/umaVoz.mp3' },
+      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/etapa1/umaVoz.mp3' },
       somMaisDenso: { nome: "MAIS DENSO", src: '/audio/timbre/adultosFalando.mp3' }
     },
     {
       titulo: "Densidade — Sons do Dia a Dia",
-      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/palma.mp3' },
-      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/aplausos.mp3' }
+      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/etapa1/palma.mp3' },
+      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/etapa1/aplausos.mp3' }
     },
     {
       titulo: "Densidade — Sons do Dia a Dia",
-      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/umPassaro.mp3' },
-      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/variosPassaros.mp3' }
+      somMenosDenso: { nome: "MENOS DENSO", src: '/audio/densidade/etapa1/umPassaro.mp3' },
+      somMaisDenso: { nome: "MAIS DENSO", src: '/audio/densidade/etapa1/variosPassaros.mp3' }
     }
   ];
 
@@ -72,7 +72,7 @@ export const gerarEtapaUmDensidade = (): ExercicioDensidade[] => {
       alvo: 'IGUAL',
       somA: { rotulo: "Som 01", src: objetoSomIgual.src },
       somB: { rotulo: "Som 02", src: objetoSomIgual.src },
-      respostaCerta: 'IGUAL',
+      respostaCerta: 'EQUAL',
       dificuldade: 'fácil'
     });
   }

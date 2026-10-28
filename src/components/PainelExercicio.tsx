@@ -90,12 +90,16 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1' }: PropsPainelE
       }
     }
 
-    if (noAtivo === 'altura' && etapaSelecionada === 2) {
+    const noLower = noAtivo.toLowerCase();
+    if ((noLower.includes('altura') || noLower.includes('dura') || noLower.includes('intensidade')) && etapaSelecionada === 2) {
       return <>Ouça os dois sons. Qual deles possui o som mais <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
     }
 
-    return <>Ouça os dois sons. Qual deles {noAtivo === 'timbre' || noAtivo === 'densidade' ? 'é o som' : 'possui o som mais'} <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
+    return <>Ouça os dois sons. Qual deles {noLower.includes('timbre') || noLower.includes('densidade') ? 'é o som' : 'possui o som mais'} <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
   };
+
+  const noLower = noAtivo.toLowerCase();
+  const mostraSeletorEtapas = eMundoDois || noLower.includes('altura') || noLower.includes('densidade') || noLower.includes('dura') || noLower.includes('intensidade') || noLower.includes('timbre');
 
   return (
     <>
@@ -108,8 +112,8 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1' }: PropsPainelE
                 {noAtivo.toUpperCase()}
               </span>
 
-              {/* Seletor Compacto E1 / E2 para o Mundo 2 ou Altura no Mundo 1 */}
-              {(eMundoDois || noAtivo === 'altura') && (
+              {/* Seletor Compacto E1 / E2 ativado para todos os nós */}
+              {mostraSeletorEtapas && (
                 <div className="flex items-center bg-surface-container-lowest border border-outline-variant/60 rounded-full p-0.5">
                   <button
                     type="button"

@@ -6,6 +6,6 @@ export interface ExercicioDensidade {
   alvo: 'MENOS_DENSO' | 'MAIS_DENSO' | 'IGUAL';
   somA: { rotulo: string; src: string };
   somB: { rotulo: string; src: string };
-  respostaCerta: 'A' | 'B' | 'IGUAL';
+  respostaCerta: 'A' | 'B' | 'EQUAL';
   dificuldade: 'fácil' | 'médio' | 'difícil' | 'perito';
 }

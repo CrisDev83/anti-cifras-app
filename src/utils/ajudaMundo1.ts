@@ -1,23 +1,35 @@
 import { 
-  gerarEtapaUmAltura, todosExerciciosEtapaAltura,
-  gerarEtapaUmDuracao, todosExerciciosEtapaDuracao,
-  todosExerciciosEtapasTimbre, 
-  gerarEtapaUmIntensidade, todosExerciciosIntensidade,
-  gerarEtapaUmDensidade, todosExerciciosEtapasDensidade 
+  gerarEtapaUmAltura, 
+  gerarEtapaUmDuracao, 
+  gerarEtapaUmIntensidade, 
+  gerarEtapaUmDensidade 
 } from '@/data/mundo1';
-// Importa também o gerador da etapa 2 de altura (ou o agregado)
-import { gerarEtapaDoisAltura } from '@/data/mundo1/altura/etapaDois'; // Ajusta o caminho se necessário
+import { gerarEtapaDoisAltura } from '@/data/mundo1/altura/etapaDois';
+import { gerarEtapaDoisDensidade } from '@/data/mundo1/densidade/etapaDois';
+import { gerarEtapaDoisDuracao } from '@/data/mundo1/duracao/etapaDois';
+import { gerarEtapaDoisIntensidade } from '@/data/mundo1/intensidade/etapaDois';
+import { gerarEtapaUmTimbre } from '@/data/mundo1/timbre/etapaUm';
+import { gerarEtapaDoisTimbre } from '@/data/mundo1/timbre/etapaDois';
 
 export const buscarExerciciosParaNo = (no: string) => {
-  if (no === 'duracao') {
-    return gerarEtapaUmDuracao ? gerarEtapaUmDuracao() : todosExerciciosEtapaDuracao;
-  } else if (no === 'timbre') {
-    // Se quiseres abrir o timbre para outras etapas no futuro, podes remover o .filter(ex => ex.etapa === 1) ou deixá-lo se a etapa 2 ainda não existir
-    return todosExerciciosEtapasTimbre; 
-  } else if (no === 'intensidade') {
-    return gerarEtapaUmIntensidade ? gerarEtapaUmIntensidade() : todosExerciciosIntensidade;
-  } else if (no === 'densidade') {
-    return gerarEtapaUmDensidade ? gerarEtapaUmDensidade() : todosExerciciosEtapasDensidade;
+  const noLower = no.toLowerCase();
+  
+  if (noLower.includes('dura')) {
+    const exerciciosEtapa1 = gerarEtapaUmDuracao ? gerarEtapaUmDuracao() : [];
+    const exerciciosEtapa2 = gerarEtapaDoisDuracao ? gerarEtapaDoisDuracao() : [];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+  } else if (noLower.includes('timbre')) {
+    const exerciciosEtapa1 = gerarEtapaUmTimbre ? gerarEtapaUmTimbre() : [];
+    const exerciciosEtapa2 = gerarEtapaDoisTimbre ? gerarEtapaDoisTimbre() : [];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+  } else if (noLower.includes('intensidade')) {
+    const exerciciosEtapa1 = gerarEtapaUmIntensidade ? gerarEtapaUmIntensidade() : [];
+    const exerciciosEtapa2 = gerarEtapaDoisIntensidade ? gerarEtapaDoisIntensidade() : [];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+  } else if (noLower.includes('densidade')) {
+    const exerciciosEtapa1 = gerarEtapaUmDensidade ? gerarEtapaUmDensidade() : [];
+    const exerciciosEtapa2 = gerarEtapaDoisDensidade ? gerarEtapaDoisDensidade() : [];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2];
   } else {
     // Para a ALTURA, juntamos a Etapa 1 e a Etapa 2 para o hook conseguir filtrar a que o utilizador escolheu!
     const exerciciosEtapa1 = gerarEtapaUmAltura ? gerarEtapaUmAltura() : [];
@@ -29,14 +41,16 @@ export const buscarExerciciosParaNo = (no: string) => {
 
 export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
   const alvoBruto = exercicio?.alvo || exercicio?.target;
-  switch (noAtivo) {
-    case 'duracao':
+  const noLower = noAtivo.toLowerCase();
+
+  switch (true) {
+    case noLower.includes('dura'):
       return alvoBruto === 'LONGO' ? 'LONGO' : 'CURTO';
-    case 'intensidade':
+    case noLower.includes('intensidade'):
       return alvoBruto === 'FORTE' ? 'FORTE' : 'FRACO';
-    case 'densidade':
+    case noLower.includes('densidade'):
       return alvoBruto === 'MAIS_DENSO' ? 'MAIS DENSO' : 'MENOS DENSO';
-    case 'timbre':
+    case noLower.includes('timbre'):
       return alvoBruto;
     default:
       return alvoBruto === 'AGUDA' ? 'AGUDA' : 'GRAVE';
@@ -45,10 +59,11 @@ export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
 
 export const obterRotuloOpcao = (letra: string, exercicio: any, noAtivo: string) => {
   const rotuloAlvo = obterRotuloAlvo(exercicio, noAtivo);
+  const noLower = noAtivo.toLowerCase();
 
-  if (noAtivo === 'timbre') return `Som ${letra} é ${rotuloAlvo}`;
-  if (noAtivo === 'densidade') return `Som ${letra} é ${rotuloAlvo?.toLowerCase()}`;
-  if (noAtivo === 'duracao') return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
-  if (noAtivo === 'intensidade') return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
+  if (noLower.includes('timbre')) return `Som ${letra} é ${rotuloAlvo}`;
+  if (noLower.includes('densidade')) return `Som ${letra} é ${rotuloAlvo?.toLowerCase()}`;
+  if (noLower.includes('dura')) return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
+  if (noLower.includes('intensidade')) return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
   return `Som ${letra} é mais ${rotuloAlvo === 'AGUDA' ? 'agudo' : 'grave'}`;
 };
