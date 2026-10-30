@@ -4,28 +4,28 @@ export const gerarEtapaDoisDuracao = (): ExercicioDuracao[] => {
   const par = [
     {
       titulo: "Duração — Instrumentos",
-      curto: '/audio/duracao/latidoCurto.mp3',
-      longo: '/audio/duracao/uivoLongo.mp3'
+      curto: '/audio/duracao/etapa2/flauta_G_2t.mp3',
+      longo: '/audio/duracao/etapa2/flauta_G_8t.mp3'
     },
     {
       titulo: "Duração — Instrumentos",
-      curto: '/audio/duracao/buzinaCurta.mp3',
-      longo: '/audio/duracao/sireneLonga.mp3'
+      curto: '/audio/duracao/etapa2/violino_C4_2t.mp3',
+      longo: '/audio/duracao/etapa2/violino_C4_8t.mp3'
     },
     {
       titulo: "Duração — Instrumentos",
-      curto: '/audio/duracao/alermaCurto.mp3',
-      longo: '/audio/duracao/alermeLongo.mp3'
+      curto: '/audio/duracao/etapa2/guitar_A3_4t.mp3',
+      longo: '/audio/duracao/etapa2/guitar_A3_8t.mp3'
     },
     {
       titulo: "Duração — Instrumentos",
-      curto: '/audio/duracao/portaFechando.mp3',
-      longo: '/audio/duracao/portaAbrindo.mp3'
+      curto: '/audio/duracao/etapa2/acordeon_D_4t.mp3',
+      longo: '/audio/duracao/etapa2/acordeon_D_8t.mp3'
     },
     {
       titulo: "Duração — Instrumentos",
-      curto: '/audio/duracao/chuvaCurta.mp3',
-      longo: '/audio/duracao/chuvaLonga.mp3'
+      curto: '/audio/duracao/etapa2/violao_C_2t.mp3',
+      longo: '/audio/duracao/etapa2/violao_C_4t.mp3'
     }
   ];
 

@@ -6,6 +6,6 @@ export interface ExercicioTimbre {
   alvo: string;
   somA: { rotulo: string; src: string };
   somB: { rotulo: string; src: string };
-  respostaCerta: 'A' | 'B' | 'IGUAL';
+  respostaCerta: 'A' | 'B' | 'EQUAL';
   dificuldade: 'fácil' | 'médio' | 'difícil' | 'perito';
 }

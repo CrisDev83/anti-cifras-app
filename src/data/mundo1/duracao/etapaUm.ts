@@ -5,28 +5,28 @@ export const gerarEtapaUmDuracao = (): ExercicioDuracao[] => {
   const par = [
     {
       titulo: "Duração — Sons do Dia a Dia",
-      curto: '/audio/duracao/latidoCurto.mp3',
+      curto: '/audio/duracao/etapa1/latidoCurto.mp3',
       longo: '/audio/duracao/uivoLongo.mp3'
     },
     {
       titulo: "Duração — Sons do Dia a Dia",
-      curto: '/audio/duracao/buzinaCurta.mp3',
+      curto: '/audio/duracao/etapa1/buzinaCurta.mp3',
       longo: '/audio/duracao/sireneLonga.mp3'
     },
     {
       titulo: "Duração — Sons do Dia a Dia",
-      curto: '/audio/duracao/alermaCurto.mp3',
-      longo: '/audio/duracao/alermeLongo.mp3'
+      curto: '/audio/duracao/etapa1/alermaCurto.mp3',
+      longo: '/audio/duracao/etapa1/alermeLongo.mp3'
     },
     {
       titulo: "Duração — Sons do Dia a Dia",
-      curto: '/audio/duracao/portaFechando.mp3',
-      longo: '/audio/duracao/portaAbrindo.mp3'
+      curto: '/audio/duracao/etapa1/portaFechando.mp3',
+      longo: '/audio/duracao/etapa1/portaAbrindo.mp3'
     },
     {
       titulo: "Duração — Sons do Dia a Dia",
-      curto: '/audio/duracao/chuvaCurta.mp3',
-      longo: '/audio/duracao/chuvaLonga.mp3'
+      curto: '/audio/duracao/etapa1/chuvaCurta.mp3',
+      longo: '/audio/duracao/etapa1/chuvaLonga.mp3'
     }
   ];
 

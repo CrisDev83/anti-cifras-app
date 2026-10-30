@@ -4,28 +4,28 @@ export const gerarEtapaUmTimbre = (): ExercicioTimbre[] => {
   const par = [
     {
       titulo: "Timbre — Sons do Dia a Dia",
-      somA: { nome: "Objeto de Vidro", src: '/audio/timbre/copoVidro.mp3' },
-      somB: { nome: "Objeto de Madeira", src: '/audio/timbre/objetoMadeira.mp3' }
+      somA: { nome: "Objeto de Vidro", src: '/audio/timbre/etapa1/copoVidro.mp3' },
+      somB: { nome: "Objeto de Madeira", src: '/audio/timbre/etapa1/objetoMadeira.mp3' }
     },
     {
       titulo: "Timbre — Sons do Dia a Dia",
-      somA: { nome: "Rugido de Leão", src: '/audio/timbre/rugidoLeao.mp3' },
-      somB: { nome: "Miado de Gato", src: '/audio/timbre/miadoGato.mp3' }
+      somA: { nome: "Rugido de Leão", src: '/audio/timbre/etapa1/rugidoLeao.mp3' },
+      somB: { nome: "Miado de Gato", src: '/audio/timbre/etapa1/miadoGato.mp3' }
     },
     {
       titulo: "Timbre — Sons do Dia a Dia",
-      somA: { nome: "Andando", src: '/audio/timbre/andando.mp3' },
-      somB: { nome: "Correndo", src: '/audio/timbre/correndo.mp3' }
+      somA: { nome: "Andando", src: '/audio/timbre/etapa1/andando.mp3' },
+      somB: { nome: "Correndo", src: '/audio/timbre/etapa1/correndo.mp3' }
     },
     {
       titulo: "Timbre — Sons do Dia a Dia",
-      somA: { nome: "Crianças Falando", src: '/audio/timbre/criancasFalando.mp3' },
-      somB: { nome: "Adultos Falando", src: '/audio/timbre/adultosFalando.mp3' }
+      somA: { nome: "Crianças Falando", src: '/audio/timbre/etapa1/criancasFalando.mp3' },
+      somB: { nome: "Adultos Falando", src: '/audio/timbre/etapa1/adultosFalando.mp3' }
     },
     {
       titulo: "Timbre — Sons do Dia a Dia",
-      somA: { nome: "Floresta", src: '/audio/timbre/floresta.mp3' },
-      somB: { nome: "Mar", src: '/audio/timbre/mar.mp3' }
+      somA: { nome: "Floresta", src: '/audio/timbre/etapa1/floresta.mp3' },
+      somB: { nome: "Mar", src: '/audio/timbre/etapa1/mar.mp3' }
     }
   ];
 
@@ -72,7 +72,7 @@ export const gerarEtapaUmTimbre = (): ExercicioTimbre[] => {
       alvo: objetoSomIgual.nome,
       somA: { rotulo: "Som 01", src: objetoSomIgual.src },
       somB: { rotulo: "Som 02", src: objetoSomIgual.src },
-      respostaCerta: 'IGUAL',
+      respostaCerta: 'EQUAL',
       dificuldade: 'fácil'
     });
   }
