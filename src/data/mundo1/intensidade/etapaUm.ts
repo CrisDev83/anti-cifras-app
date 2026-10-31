@@ -32,7 +32,7 @@ export const gerarEtapaUmIntensidade = (): ExercicioIntensidade[] => {
   const exerciciosBrutos: Omit<ExercicioIntensidade, 'id' | 'numeroQuestao'>[] = [];
 
   // 1. Criamos exatamente 16 exercícios de contraste normal
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
 
     const eA = Math.random() < 0.5;
@@ -61,7 +61,7 @@ export const gerarEtapaUmIntensidade = (): ExercicioIntensidade[] => {
   }
 
   // 2. Criamos exatamente 4 exercícios onde os sons são IGUAIS
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
     const usarForte = Math.random() < 0.5;
     const objetoSomIgual = usarForte ? parAleatorio.somForte : parAleatorio.somFraco;
@@ -72,7 +72,7 @@ export const gerarEtapaUmIntensidade = (): ExercicioIntensidade[] => {
       alvo: 'IGUAL',
       somA: { rotulo: "Som 01", src: objetoSomIgual.src },
       somB: { rotulo: "Som 02", src: objetoSomIgual.src },
-      respostaCerta: 'IGUAL',
+      respostaCerta: 'EQUAL',
       dificuldade: 'fácil'
     });
   }

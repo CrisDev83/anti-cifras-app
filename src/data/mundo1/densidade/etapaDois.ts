@@ -32,7 +32,7 @@ export const gerarEtapaDoisDensidade = (): ExercicioDensidade[] => {
   const exerciciosBrutos: Omit<ExercicioDensidade, 'id' | 'numeroQuestao'>[] = [];
 
   // 1. Criamos exatamente 4 exercícios de contraste para teste
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 4; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
 
     const eA = Math.random() < 0.5;
@@ -61,7 +61,7 @@ export const gerarEtapaDoisDensidade = (): ExercicioDensidade[] => {
   }
 
   // 2. Criamos exatamente 1 exercício onde os sons são IGUAIS para teste
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
     const usarMenosDenso = Math.random() < 0.5;
     const objetoSomIgual = usarMenosDenso ? parAleatorio.somMenosDenso : parAleatorio.somMaisDenso;

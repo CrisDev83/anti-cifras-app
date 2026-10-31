@@ -32,7 +32,7 @@ export const generateRitmoStageTwo = (): RitmoExercise[] => {
   const rawExercises: Omit<RitmoExercise, 'id' | 'questionNumber'>[] = [];
 
   // 1. Cria 16 exercícios de contraste (Bateria vs Melodia)
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isBateriaA = Math.random() < 0.5;
     const srcA = isBateriaA ? randomPair.bateria : randomPair.melodia;
@@ -52,7 +52,7 @@ export const generateRitmoStageTwo = (): RitmoExercise[] => {
   }
 
   // 2. Cria 4 exercícios onde os sons são IGUAIS
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const useBateria = Math.random() < 0.5;
     const sameSrc = useBateria ? randomPair.bateria : randomPair.melodia;

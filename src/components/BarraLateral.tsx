@@ -5,9 +5,11 @@ import React, { useState } from 'react';
 interface PropsBarraLateral {
   mundoAtual: 'mundo1' | 'mundo2';
   aoSelecionarMundo: (mundo: 'mundo1' | 'mundo2') => void;
+  vistaAtual?: 'treino' | 'afinador';
+  aoSelecionarVista?: (vista: 'treino' | 'afinador') => void;
 }
 
-export function BarraLateral({ mundoAtual, aoSelecionarMundo }: PropsBarraLateral) {
+export function BarraLateral({ mundoAtual, aoSelecionarMundo, vistaAtual = 'treino', aoSelecionarVista }: PropsBarraLateral) {
   // Controla se o submenu de mundos está aberto ou fechado
   const [mundosAbertos, setMundosAbertos] = useState(true);
 
@@ -19,9 +21,16 @@ export function BarraLateral({ mundoAtual, aoSelecionarMundo }: PropsBarraLatera
           <p className="text-caption-signal font-caption-signal text-on-surface-variant uppercase tracking-wider">Terminal Sonoro v2.4</p>
         </div>
         <nav className="flex flex-col gap-1.5">
-          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded text-primary bg-primary/10 border-l-2 border-primary font-semibold text-label-mono font-label-mono text-xs">
+          <button
+            onClick={() => aoSelecionarVista?.('treino')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-left transition-colors cursor-pointer text-label-mono font-label-mono text-xs ${
+              vistaAtual === 'treino'
+                ? 'text-primary bg-primary/10 border-l-2 border-primary font-semibold'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+            }`}
+          >
             ⚡ Treino
-          </a>
+          </button>
 
           {/* Opção Mundos com Submenu */}
           <div className="flex flex-col">
@@ -62,9 +71,16 @@ export function BarraLateral({ mundoAtual, aoSelecionarMundo }: PropsBarraLatera
             )}
           </div>
 
-          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-label-mono font-label-mono text-xs transition-colors">
-            🎛️ Sintetizador
-          </a>
+          <button
+            onClick={() => aoSelecionarVista?.('afinador')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-left transition-colors cursor-pointer text-label-mono font-label-mono text-xs ${
+              vistaAtual === 'afinador'
+                ? 'text-primary bg-primary/10 border-l-2 border-primary font-semibold'
+                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'
+            }`}
+          >
+            🎸 Afinador
+          </button>
           <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container text-label-mono font-label-mono text-xs transition-colors">
             🏆 Rankings
           </a>

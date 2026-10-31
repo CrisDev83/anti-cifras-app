@@ -34,7 +34,7 @@ export const generateHarmoniaStageOne = (): HarmoniaExercise[] => {
   const rawExercises: Omit<HarmoniaExercise, 'id' | 'questionNumber'>[] = [];
 
   // 1. Cria 4 exercícios de contraste (Harmonia vs Outro)
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isHarmoniaA = Math.random() < 0.5;
     const srcA = isHarmoniaA ? randomPair.harmonia : randomPair.outro;
@@ -54,7 +54,7 @@ export const generateHarmoniaStageOne = (): HarmoniaExercise[] => {
   }
 
   // 2. Cria 1 exercício onde os sons são IGUAIS (ambos harmonia ou ambos não-harmonia)
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
   const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
   const useHarmonia = Math.random() < 0.5;
   const sameSrc = useHarmonia ? randomPair.harmonia : randomPair.outro;

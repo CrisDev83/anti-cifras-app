@@ -32,7 +32,7 @@ export const gerarEtapaUmTimbre = (): ExercicioTimbre[] => {
   const exerciciosBrutos: Omit<ExercicioTimbre, 'id' | 'numeroQuestao'>[] = [];
 
   // 1. Cria exatamente 16 exercícios de contraste de timbre
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
 
     const eA = Math.random() < 0.5;
@@ -61,7 +61,7 @@ export const gerarEtapaUmTimbre = (): ExercicioTimbre[] => {
   }
 
   // 2. Cria exatamente 4 exercícios onde os timbres tocados são IGUAIS
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
     const usarPrimeiro = Math.random() < 0.5;
     const objetoSomIgual = usarPrimeiro ? parAleatorio.somA : parAleatorio.somB;

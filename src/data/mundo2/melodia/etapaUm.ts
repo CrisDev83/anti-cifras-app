@@ -40,7 +40,7 @@ export const generateMelodiaStageOne = (): MelodiaExercise[] => {
   const rawExercises: Omit<MelodiaExercise, 'id' | 'questionNumber'>[] = [];
 
   // 1. Cria 4 exercícios de contraste (Melodia vs Outro)
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
     const isMelodiaA = Math.random() < 0.5;
     const srcA = isMelodiaA ? randomPair.melodia : randomPair.outro;
@@ -60,7 +60,7 @@ export const generateMelodiaStageOne = (): MelodiaExercise[] => {
   }
 
   // 2. Cria 1 exercício onde os sons são IGUAIS (ambos melodia ou ambos não-melodia)
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
   const randomPair = pairs[Math.floor(Math.random() * pairs.length)];
   const useMelodia = Math.random() < 0.5;
   const sameSrc = useMelodia ? randomPair.melodia : randomPair.outro;

@@ -33,7 +33,7 @@ export const gerarEtapaUmDuracao = (): ExercicioDuracao[] => {
   const exerciciosBrutos: Omit<ExercicioDuracao, 'id' | 'numeroQuestao'>[] = [];
 
   // 1. Cria exatamente 16 exercícios de contraste normal
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 4; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
     const eLongoA = Math.random() < 0.5;
     const fonteA = eLongoA ? parAleatorio.longo : parAleatorio.curto;
@@ -60,7 +60,7 @@ export const gerarEtapaUmDuracao = (): ExercicioDuracao[] => {
   }
 
   // 2. Cria exatamente 4 exercícios onde os sons são IGUAIS
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 1; i++) {
     const parAleatorio = par[Math.floor(Math.random() * par.length)];
     const utilizarLongo = Math.random() < 0.5;
     const fonteIgual = utilizarLongo ? parAleatorio.longo : parAleatorio.curto;

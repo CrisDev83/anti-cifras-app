@@ -37,7 +37,7 @@ export const gerarEtapaDoisAltura = (): ExercicioAltura[] => {
   const exerciciosBrutos: Omit<ExercicioAltura, 'id' | 'numeroQuestao'>[] = [];
 
   // 1. Criamos os exercícios de contraste normal (com os pares de oitavas)
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 4; i++) {
     const parAleatorio = pares[Math.floor(Math.random() * pares.length)];
     const eAgudoA = Math.random() < 0.5;
     const fonteA = eAgudoA ? parAleatorio.agudo : parAleatorio.grave;
@@ -64,7 +64,7 @@ export const gerarEtapaDoisAltura = (): ExercicioAltura[] => {
   }
 
   // 2. Criamos os exercícios onde os sons são IGUAIS (para testar atenção auditiva)
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     const parAleatorio = pares[Math.floor(Math.random() * pares.length)];
     const usarAgudo = Math.random() < 0.5;
     const mesmaFonte = usarAgudo ? parAleatorio.agudo : parAleatorio.grave;
