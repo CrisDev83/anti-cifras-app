@@ -1,6 +1,7 @@
 // Referências globais de controlo de áudio para evitar sobreposições
 let currentAudio: HTMLAudioElement | null = null;
 let currentAudioSrc: string | null = null;
+let currentVolume: number = 1.0;
 
 export function playSound(soundObj: any) {
   if (!soundObj) return;
@@ -10,14 +11,21 @@ export function playSound(soundObj: any) {
     ? soundObj 
     : (soundObj.src || soundObj.fonte || soundObj.file || soundObj.audio);
 
+  // Extrai o volume caso venha definido no objeto (padrão 1.0)
+  const volume = (typeof soundObj === 'object' && soundObj !== null && soundObj.volume !== undefined) 
+    ? soundObj.volume 
+    : 1.0;
+
   // Se encontrou um caminho de áudio válido
   if (audioSrc) {
     if (currentAudio) {
-      if (currentAudioSrc === audioSrc) {
+      // Compara tanto o src quanto o volume para permitir alternar entre sons com o mesmo ficheiro mas volumes diferentes
+      if (currentAudioSrc === audioSrc && currentVolume === volume) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
         currentAudio = null;
         currentAudioSrc = null;
+        currentVolume = 1.0;
         return;
       }
       currentAudio.pause();
@@ -27,9 +35,10 @@ export function playSound(soundObj: any) {
     }
 
     const audio = new Audio(audioSrc);
-    audio.volume = 1.0;
+    audio.volume = volume;
     currentAudio = audio;
     currentAudioSrc = audioSrc;
+    currentVolume = volume;
 
     audio.play().catch(err => {
       console.error("Erro ao reproduzir o ficheiro de áudio:", err, "Caminho tentado:", audioSrc);
@@ -39,6 +48,7 @@ export function playSound(soundObj: any) {
       if (currentAudio === audio) {
         currentAudio = null;
         currentAudioSrc = null;
+        currentVolume = 1.0;
       }
     };
     return;
@@ -73,5 +83,6 @@ export function stopCurrentAudio() {
     currentAudio.pause();
     currentAudio = null;
     currentAudioSrc = null;
+    currentVolume = 1.0;
   }
 }

@@ -1,42 +1,27 @@
 import { ExercicioIntensidade } from "./types";
 
 export const gerarEtapaDoisIntensidade = (): ExercicioIntensidade[] => {
-  const par = [
-    {
-      titulo: "Intensidade — Sons Dinâmicos",
-      fraco: '/audio/intensidade/sussurroFraco.mp3',
-      forte: '/audio/intensidade/gritoForte.mp3'
-    },
-    {
-      titulo: "Intensidade — Sons Dinâmicos",
-      fraco: '/audio/intensidade/baixoFraco.mp3',
-      forte: '/audio/intensidade/altoForte.mp3'
-    },
-    {
-      titulo: "Intensidade — Sons Dinâmicos",
-      fraco: '/audio/intensidade/ventoFraco.mp3',
-      forte: '/audio/intensidade/trovaoForte.mp3'
-    },
-    {
-      titulo: "Intensidade — Sons Dinâmicos",
-      fraco: '/audio/intensidade/passosFracos.mp3',
-      forte: '/audio/intensidade/batidaForte.mp3'
-    },
-    {
-      titulo: "Intensidade — Sons Dinâmicos",
-      fraco: '/audio/intensidade/chuvaFraca.mp3',
-      forte: '/audio/intensidade/tempestadeForte.mp3'
-    }
+  // Sons base reutilizados (aproveita o mesmo ficheiro e aplica o volume por código)
+  const fontesBase = [
+    { titulo: "Intensidade — Instrumentos", nome: "Banda", src: '/audio/densidade/etapa2/banda_rock.mp3' },
+    { titulo: "Intensidade — Instrumentos", nome: "Sinfonia", src: '/audio/densidade/etapa2/sinfonia.mp3' },
+    { titulo: "Intensidade — Instrumentos", nome: "Flauta", src: '/audio/melodia/melodiaFlauta.mp3' },
+    { titulo: "Intensidade — Instrumentos", nome: "Violino", src: '/audio/densidade/etapa2/solo_violino.mp3' },
+    { titulo: "Intensidade — Instrumentos", nome: "Violão", src: '/audio/harmonia/acordesViolao.mp3' }
   ];
 
   const exerciciosBrutos: Omit<ExercicioIntensidade, 'id' | 'numeroQuestao'>[] = [];
 
-  // 1. Cria exatamente 4 exercícios de contraste para teste
+  // 1. Cria exatamente 16 exercícios de contraste de intensidade
   for (let i = 0; i < 4; i++) {
-    const parAleatorio = par[Math.floor(Math.random() * par.length)];
+    const itemBase = fontesBase[Math.floor(Math.random() * fontesBase.length)];
+
     const eForteA = Math.random() < 0.5;
-    const fonteA = eForteA ? parAleatorio.forte : parAleatorio.fraco;
-    const fonteB = eForteA ? parAleatorio.fraco : parAleatorio.forte;
+    
+    // Atribui os volumes dinamicamente: 1.0 para forte e 0.3 para fraco
+    const volumeA = eForteA ? 1.0 : 0.3;
+    const volumeB = eForteA ? 0.3 : 1.0;
+
     const solicitarForte = Math.random() < 0.5;
     const alvo: 'FORTE' | 'FRACO' = solicitarForte ? 'FORTE' : 'FRACO';
 
@@ -49,29 +34,28 @@ export const gerarEtapaDoisIntensidade = (): ExercicioIntensidade[] => {
 
     exerciciosBrutos.push({
       etapa: 2,
-      titulo: parAleatorio.titulo,
+      titulo: itemBase.titulo,
       alvo,
-      somA: { rotulo: "Som 01", src: fonteA },
-      somB: { rotulo: "Som 02", src: fonteB },
+      somA: { rotulo: "Som 01", src: itemBase.src, volume: volumeA },
+      somB: { rotulo: "Som 02", src: itemBase.src, volume: volumeB },
       respostaCerta,
-      dificuldade: 'fácil'
+      dificuldade: 'médio'
     });
   }
 
-  // 2. Cria exatamente 1 exercício onde os sons são IGUAIS para teste
+  // 2. Cria exatamente 4 exercícios onde os sons são IGUAIS (mesmo ficheiro e mesmo volume)
   for (let i = 0; i < 1; i++) {
-    const parAleatorio = par[Math.floor(Math.random() * par.length)];
-    const utilizarForte = Math.random() < 0.5;
-    const fonteIgual = utilizarForte ? parAleatorio.forte : parAleatorio.fraco;
+    const itemBase = fontesBase[Math.floor(Math.random() * fontesBase.length)];
+    const volumeIgual = Math.random() < 0.5 ? 1.0 : 0.3;
 
     exerciciosBrutos.push({
       etapa: 2,
-      titulo: parAleatorio.titulo,
+      titulo: itemBase.titulo,
       alvo: 'IGUAL',
-      somA: { rotulo: "Som 01", src: fonteIgual },
-      somB: { rotulo: "Som 02", src: fonteIgual },
-      respostaCerta: 'IGUAL',
-      dificuldade: 'fácil'
+      somA: { rotulo: "Som 01", src: itemBase.src, volume: volumeIgual },
+      somB: { rotulo: "Som 02", src: itemBase.src, volume: volumeIgual },
+      respostaCerta: 'EQUAL', // <-- Alinhado com o PainelExercicio ('EQUAL')
+      dificuldade: 'médio'
     });
   }
 
