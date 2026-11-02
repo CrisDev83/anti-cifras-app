@@ -7,13 +7,27 @@ interface PropsModeloEtapaCompleta {
   erros: number;
   totalExercicios: number;
   aoReiniciar: () => void;
+  aoConcluirEtapa?: () => void;
+  noAtivo?: string;
+  etapaSelecionada?: number;
 }
 
-export function ModeloEtapaCompleta({ estaAberto, erros, totalExercicios, aoReiniciar }: PropsModeloEtapaCompleta) {
+export function ModeloEtapaCompleta({ 
+  estaAberto, 
+  erros, 
+  totalExercicios, 
+  aoReiniciar, 
+  aoConcluirEtapa,
+  noAtivo = '',
+  etapaSelecionada = 1
+}: PropsModeloEtapaCompleta) {
   if (!estaAberto) return null;
 
   const respostasCertas = totalExercicios - erros;
   const precisao = Math.round((respostasCertas / totalExercicios) * 100);
+
+  // Formata o nome do nó capitalizado (ex: "altura" -> "Altura")
+  const nomeNoFormatado = noAtivo ? noAtivo.charAt(0).toUpperCase() + noAtivo.slice(1) : '';
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -28,8 +42,10 @@ export function ModeloEtapaCompleta({ estaAberto, erros, totalExercicios, aoRein
         <h3 className="text-2xl font-bold text-on-surface mt-1 mb-2">
           Etapa Concluída!
         </h3>
+        
+        {/* Descrição Dinâmica da Etapa e Nó */}
         <p className="text-sm text-on-surface-variant mb-6">
-          A sua calibração perceptual para este nó foi concluída com sucesso.
+          Etapa <span className="text-primary font-bold">{etapaSelecionada}</span> de <span className="text-primary font-bold">{nomeNoFormatado}</span> concluída com sucesso.
         </p>
 
         {/* Quadro de Resumo de Desempenho */}
@@ -40,7 +56,7 @@ export function ModeloEtapaCompleta({ estaAberto, erros, totalExercicios, aoRein
           </div>
           <div className="flex flex-col border-x border-outline-variant/30">
             <span className="text-[10px] text-on-surface-variant uppercase font-label-mono">Erros</span>
-            <span className="text-lg font-bold text-rose-400">{precisao}</span>
+            <span className="text-lg font-bold text-rose-400">{erros}</span>
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] text-on-surface-variant uppercase font-label-mono">Precisão</span>
@@ -49,7 +65,10 @@ export function ModeloEtapaCompleta({ estaAberto, erros, totalExercicios, aoRein
         </div>
 
         <button
-          onClick={aoReiniciar}
+          onClick={() => {
+            if (aoConcluirEtapa) aoConcluirEtapa();
+            aoReiniciar();
+          }}
           className="w-full py-3 px-4 rounded-lg bg-primary-container text-on-primary font-bold text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:brightness-110 transition-all cursor-pointer"
         >
           CONTINUAR TREINO

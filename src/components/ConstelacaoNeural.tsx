@@ -13,6 +13,8 @@ export interface ItemNo {
   top: string;
   progresso?: string;
   progress?: string;
+  etapasConcluidas?: number; // Adicionado para suportar progresso dinâmico
+  totalEtapas?: number;      // Adicionado para suportar total dinâmico
 }
 
 interface PropConstelacaoNeural {
@@ -81,7 +83,15 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
           const estaAtivo = noAtivo === no.id;
           const rotuloFinal = no.rotulo || no.label || no.id;
           const iconeFinal = no.icone || no.icon || ICONES_PADRAO[no.id] || 'radio_button_checked';
-          const progressoFinal = no.progresso || no.progress || 'E1';
+          
+          // Cálculo dinâmico das etapas (ex: 0/2, 1/2) com fallback seguro
+          const progressoTexto = no.progresso || no.progress || '0/2';
+          const [concluidasStr, totalStr] = progressoTexto.split('/');
+          const concluidas = parseInt(concluidasStr) || 0;
+          const total = parseInt(totalStr) || 2;
+          
+          // Verifica se o nó está totalmente concluído
+          const estaCompleto = concluidas >= total;
 
           return (
             <div 
@@ -90,20 +100,48 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
               className="absolute z-10 flex flex-col items-center group cursor-pointer" 
               style={{ left: no.left, top: no.top, transform: 'translate(-50%, -50%)' }}
             >
-              <div className={`relative w-16 h-16 rounded-xl bg-surface-container/90 border-2 transition-all group-hover:scale-110 flex items-center justify-center ${estaAtivo ? 'border-primary shadow-[0_0_16px_rgba(76,215,246,0.4)]' : 'border-outline-variant/50 hover:border-primary/60'}`}>
-                <span className={`material-symbols-outlined text-2xl ${estaAtivo ? 'text-primary' : 'text-on-surface-variant'}`}>
+              <div className={`relative w-16 h-16 rounded-xl bg-surface-container/90 border-2 transition-all group-hover:scale-110 flex items-center justify-center ${
+                estaCompleto 
+                  ? 'border-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.4)] bg-amber-950/20' 
+                  : estaAtivo 
+                    ? 'border-primary shadow-[0_0_16px_rgba(76,215,246,0.4)]' 
+                    : 'border-outline-variant/50 hover:border-primary/60'
+              }`}>
+                <span className={`material-symbols-outlined text-2xl ${
+                  estaCompleto 
+                    ? 'text-amber-400' 
+                    : estaAtivo 
+                      ? 'text-primary' 
+                      : 'text-on-surface-variant'
+                }`}>
                   {iconeFinal}
                 </span>
-                <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-primary text-on-primary text-[10px] font-label-mono font-bold shadow-md">
-                  {progressoFinal}
+                <span className={`absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full text-[10px] font-label-mono font-bold shadow-md ${
+                  estaCompleto 
+                    ? 'bg-amber-400 text-slate-950' 
+                    : 'bg-primary text-on-primary'
+                }`}>
+                  {progressoTexto}
                 </span>
               </div>
               <div className="mt-2 flex flex-col items-center">
-                <span className={`text-xs font-title-sm font-bold tracking-wide text-center ${estaAtivo ? 'text-primary' : 'text-on-surface'}`}>
+                <span className={`text-xs font-title-sm font-bold tracking-wide text-center ${
+                  estaCompleto 
+                    ? 'text-amber-400' 
+                    : estaAtivo 
+                      ? 'text-primary' 
+                      : 'text-on-surface'
+                }`}>
                   {rotuloFinal}
                 </span>
-                <span className={`text-[10px] font-caption-signal flex items-center gap-1 mt-0.5 ${estaAtivo ? 'text-tertiary' : 'text-on-surface-variant'}`}>
-                  {estaAtivo ? '● Treinando' : 'Disponível'}
+                <span className={`text-[10px] font-caption-signal flex items-center gap-1 mt-0.5 ${
+                  estaCompleto 
+                    ? 'text-amber-400 font-semibold' 
+                    : estaAtivo 
+                      ? 'text-tertiary' 
+                      : 'text-on-surface-variant'
+                }`}>
+                  {estaCompleto ? '★ Concluído' : estaAtivo ? '● Treinando' : 'Disponível'}
                 </span>
               </div>
             </div>

@@ -9,9 +9,10 @@ import { getWorld2TargetLabel, getWorld2OptionLabel } from '@/utils/ajudaMundo2'
 interface PropsPainelExercicio {
   noAtivo: string;
   mundoAtual?: 'mundo1' | 'mundo2';
+  aoConcluirEtapa?: (noId: string, etapa: number) => void;
 }
 
-export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1' }: PropsPainelExercicio) {
+export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtapa }: PropsPainelExercicio) {
   // 1. Estado para a etapa selecionada no seletor (E1 ou E2)
   const [etapaSelecionada, setEtapaSelecionada] = useState<number>(1);
 
@@ -246,6 +247,13 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1' }: PropsPainelE
         erros={erros}
         totalExercicios={exerciciosFiltrados.length || exerciciosEtapa.length}
         aoReiniciar={aoReiniciarEtapa}
+        noAtivo={noAtivo}
+        etapaSelecionada={etapaSelecionada}
+        aoConcluirEtapa={() => {
+          if (aoConcluirEtapa) {
+            aoConcluirEtapa(noAtivo, etapaSelecionada);
+          }
+        }}
       />
     </>
   );

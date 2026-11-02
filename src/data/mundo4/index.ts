@@ -1,0 +1,42 @@
+export const nosMundo4 = [
+  {
+    id: 'intervalos',
+    label: 'Intervalos',
+    icon: 'straighten',
+    left: '30%',
+    top: '30%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'escalaMaiorMenor',
+    label: 'Escalas Maior e Menor',
+    icon: 'stacked_line_chart',
+    left: '70%',
+    top: '30%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'escalaPentatonica',
+    label: 'Escala Pentatônica',
+    icon: 'blur_linear',
+    left: '50%',
+    top: '55%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'cromatismo',
+    label: 'Cromatismo',
+    icon: 'palette',
+    left: '30%',
+    top: '80%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'notasRepouso',
+    label: 'Notas de Repouso',
+    icon: 'done_all',
+    left: '70%',
+    top: '80%',
+    totalEtapas: 2,
+  },
+];

@@ -1,0 +1,42 @@
+export const nosMundo5 = [
+  {
+    id: 'triades',
+    label: 'Tríades',
+    icon: 'category',
+    left: '30%',
+    top: '30%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'tetrades',
+    label: 'Tétrades e Sétimas',
+    icon: 'grid_view',
+    left: '70%',
+    top: '30%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'campoHarmonico',
+    label: 'Campo Harmônico',
+    icon: 'hub',
+    left: '50%',
+    top: '55%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'inversoes',
+    label: 'Inversões de Acordes',
+    icon: 'swap_vert',
+    left: '30%',
+    top: '80%',
+    totalEtapas: 2,
+  },
+  {
+    id: 'conducaoVozes',
+    label: 'Condução de Vozes',
+    icon: 'linear_scale',
+    left: '70%',
+    top: '80%',
+    totalEtapas: 2,
+  },
+];

@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 
 interface PropsBarraLateral {
-  mundoAtual: 'mundo1' | 'mundo2';
-  aoSelecionarMundo: (mundo: 'mundo1' | 'mundo2') => void;
+  mundoAtual: 'mundo1' | 'mundo2' | 'mundo3' | 'mundo4' | 'mundo5';
+  aoSelecionarMundo: (mundo: 'mundo1' | 'mundo2' | 'mundo3' | 'mundo4' | 'mundo5') => void;
   vistaAtual?: 'treino' | 'afinador';
   aoSelecionarVista?: (vista: 'treino' | 'afinador') => void;
 }
@@ -66,6 +66,36 @@ export function BarraLateral({ mundoAtual, aoSelecionarMundo, vistaAtual = 'trei
                   }`}
                 >
                   Mundo 2: Elementos da Música
+                </button>
+                <button
+                  onClick={() => aoSelecionarMundo('mundo3')}
+                  className={`text-left px-3 py-2 rounded text-xs transition-colors cursor-pointer ${
+                    mundoAtual === 'mundo3'
+                      ? 'text-primary font-bold bg-primary/10'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50'
+                  }`}
+                >
+                  Mundo 3: Ritmo
+                </button>
+                <button
+                  onClick={() => aoSelecionarMundo('mundo4')}
+                  className={`text-left px-3 py-2 rounded text-xs transition-colors cursor-pointer ${
+                    mundoAtual === 'mundo4'
+                      ? 'text-primary font-bold bg-primary/10'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50'
+                  }`}
+                >
+                  Mundo 4: Melodia
+                </button>
+                <button
+                  onClick={() => aoSelecionarMundo('mundo5')}
+                  className={`text-left px-3 py-2 rounded text-xs transition-colors cursor-pointer ${
+                    mundoAtual === 'mundo5'
+                      ? 'text-primary font-bold bg-primary/10'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container/50'
+                  }`}
+                >
+                  Mundo 5: Harmonia
                 </button>
               </div>
             )}

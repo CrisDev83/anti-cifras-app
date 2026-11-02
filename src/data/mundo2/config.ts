@@ -4,7 +4,9 @@ export interface ConfigNosMundo2 {
   icon: string;
   left: string;
   top: string;
-  progress: string;
+  progress?: string;
+  etapasConcluidas?: number; // Começa em 0
+  totalEtapas?: number;      // Definido para 2
 }
 
 export const world2Nodes: ConfigNosMundo2[] = [
@@ -16,6 +18,8 @@ export const world2Nodes: ConfigNosMundo2[] = [
     left: '50%',
     top: '25%',
     progress: '0/5',
+    etapasConcluidas: 0,
+    totalEtapas: 2,
   },
   {
     id: 'melodia',
@@ -24,6 +28,8 @@ export const world2Nodes: ConfigNosMundo2[] = [
     left: '50%',
     top: '75%',
     progress: '0/5',
+    etapasConcluidas: 0,
+    totalEtapas: 2,
   },
   {
     id: 'harmonia',
@@ -32,5 +38,7 @@ export const world2Nodes: ConfigNosMundo2[] = [
     left: '75%',
     top: '50%',
     progress: '0/5',
+    etapasConcluidas: 0,
+    totalEtapas: 2,
   },
 ];

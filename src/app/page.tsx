@@ -9,10 +9,14 @@ import { PainelExercicio } from '@/components/PainelExercicio';
 import { PainelAfinador } from '@/components/PainelAfinador';
 import { nosMundo1 } from '@/data/mundo1';
 import { nosMundo2 } from '@/data/mundo2';
+import { nosMundo3 } from '@/data/mundo3';
+import { nosMundo4 } from '@/data/mundo4';
+import { nosMundo5 } from '@/data/mundo5'; // <-- 1. Importar os nós do Mundo 5
+import { useProgressoMundo } from '@/hooks/useProgressoMundo';
 
 export default function Home() {
-  // Estado para controlar qual o mundo ativo ('mundo1' ou 'mundo2')
-  const [mundoAtual, setMundoAtual] = useState<'mundo1' | 'mundo2'>('mundo1');
+  // Estado para controlar qual o mundo ativo (incluindo 'mundo5')
+  const [mundoAtual, setMundoAtual] = useState<'mundo1' | 'mundo2' | 'mundo3' | 'mundo4' | 'mundo5'>('mundo1');
 
   // Estado para o nó ativo selecionado
   const [noAtivo, setNoAtivo] = useState<string>('altura');
@@ -20,17 +24,36 @@ export default function Home() {
   // Estado para controlar se estamos no 'treino' ou no 'afinador'
   const [vistaAtual, setVistaAtual] = useState<'treino' | 'afinador'>('treino');
 
-  // Seleciona dinamicamente os nós com base no mundo escolhido
-  const nosAtuais = mundoAtual === 'mundo1' ? nosMundo1 : nosMundo2;
+  // Hook centralizado de progresso unificado aqui no nível superior
+  const { registrarConclusaoEtapaEspecifica, obterTextoProgresso } = useProgressoMundo();
+
+  // Seleciona dinamicamente os nós com base no mundo escolhido e injeta o progresso dinâmico
+  const nosBrutos = 
+    mundoAtual === 'mundo1' ? nosMundo1 : 
+    mundoAtual === 'mundo2' ? nosMundo2 : 
+    mundoAtual === 'mundo3' ? nosMundo3 : 
+    mundoAtual === 'mundo4' ? nosMundo4 : 
+    nosMundo5; // <-- 2. Adicionar suporte ao Mundo 5
+
+  const nosAtuais = nosBrutos.map(no => ({
+    ...no,
+    progresso: obterTextoProgresso(no.id, no.totalEtapas || 2),
+  }));
 
   // Função para mudar de mundo e redefinir o nó ativo inicial
-  const aoSelecionarMundo = (mundo: 'mundo1' | 'mundo2') => {
+  const aoSelecionarMundo = (mundo: 'mundo1' | 'mundo2' | 'mundo3' | 'mundo4' | 'mundo5') => {
     setMundoAtual(mundo);
     setVistaAtual('treino'); // Garante que volta ao treino ao trocar de mundo
     if (mundo === 'mundo1') {
       setNoAtivo('altura');
-    } else {
+    } else if (mundo === 'mundo2') {
       setNoAtivo('ritmo');
+    } else if (mundo === 'mundo3') {
+      setNoAtivo('pulsacao');
+    } else if (mundo === 'mundo4') {
+      setNoAtivo('intervalos');
+    } else {
+      setNoAtivo('triades'); // <-- 3. Nó inicial padrão para o Mundo 5
     }
   };
 
@@ -51,7 +74,7 @@ export default function Home() {
 
         <main className="flex-1 p-4 md:p-6 lg:p-8 flex flex-col gap-6 lg:gap-8">
           {vistaAtual === 'treino' ? (
-            // Layout normal de Treino (2 colunas: Esquerda com Mundo/Constelação, Direita com Painel de Exercício)
+            // Layout normal de Treino (2 colunas: Esquerda com Mundo/Constelação, Direita com Painel de Exercício ou Aviso)
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8 items-start">
               <section className="xl:col-span-7 flex flex-col gap-6">
                 <PrincipalMundo mundoAtual={mundoAtual} />
@@ -61,10 +84,29 @@ export default function Home() {
                   nos={nosAtuais}
                 />
               </section>
-              <PainelExercicio 
-                noAtivo={noAtivo as any} 
-                mundoAtual={mundoAtual} 
-              />
+
+              {/* Lado Direito: Mostra os exercícios ou o aviso de construção para os mundos sem exercícios (3, 4 e 5) */}
+              <div className="xl:col-span-5 w-full">
+                {mundoAtual === 'mundo3' || mundoAtual === 'mundo4' || mundoAtual === 'mundo5' ? (
+                  <div className="w-full bg-surface-container/70 border border-outline-variant/40 rounded-xl p-8 text-center flex flex-col items-center justify-center gap-4 min-h-[400px]">
+                    <div className="w-14 h-14 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary text-2xl">
+                      🚧
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h2 className="text-title-md font-bold text-on-surface">Módulo em Construção</h2>
+                      <p className="text-body-sm text-on-surface-variant max-w-sm">
+                        Os exercícios interativos para este mundo estão a ser arquitetados. Podes explorar os nós na constelação e voltar em breve!
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <PainelExercicio 
+                    noAtivo={noAtivo as any} 
+                    mundoAtual={mundoAtual} 
+                    aoConcluirEtapa={(noId, etapa) => registrarConclusaoEtapaEspecifica(noId, etapa)}
+                  />
+                )}
+              </div>
             </div>
           ) : (
             // Layout do Afinador: Ocupa o espaço completo da área principal
