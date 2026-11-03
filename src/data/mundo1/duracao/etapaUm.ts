@@ -4,27 +4,27 @@ export const gerarEtapaUmDuracao = (): ExercicioDuracao[] => {
   // Apenas o par de áudios que já existem na pasta public/audio/duracao/
   const par = [
     {
-      titulo: "Duração — Sons do Dia a Dia",
+      titulo: "",
       curto: '/audio/duracao/etapa1/latidoCurto.mp3',
       longo: '/audio/duracao/uivoLongo.mp3'
     },
     {
-      titulo: "Duração — Sons do Dia a Dia",
+      titulo: "",
       curto: '/audio/duracao/etapa1/buzinaCurta.mp3',
       longo: '/audio/duracao/sireneLonga.mp3'
     },
     {
-      titulo: "Duração — Sons do Dia a Dia",
+      titulo: "",
       curto: '/audio/duracao/etapa1/alermaCurto.mp3',
       longo: '/audio/duracao/etapa1/alermeLongo.mp3'
     },
     {
-      titulo: "Duração — Sons do Dia a Dia",
+      titulo: "",
       curto: '/audio/duracao/etapa1/portaFechando.mp3',
       longo: '/audio/duracao/etapa1/portaAbrindo.mp3'
     },
     {
-      titulo: "Duração — Sons do Dia a Dia",
+      titulo: "",
       curto: '/audio/duracao/etapa1/chuvaCurta.mp3',
       longo: '/audio/duracao/etapa1/chuvaLonga.mp3'
     }

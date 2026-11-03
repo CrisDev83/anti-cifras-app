@@ -13,7 +13,7 @@ interface PropsPainelExercicio {
 }
 
 export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtapa }: PropsPainelExercicio) {
-  // 1. Estado para a etapa selecionada no seletor (E1 ou E2)
+  // 1. Estado para a etapa selecionada no seletor (E1, E2 ou E3)
   const [etapaSelecionada, setEtapaSelecionada] = useState<number>(1);
 
   // Redefine para a Etapa 1 sempre que o mundo ou o nó ativo mudar
@@ -45,12 +45,29 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
     if (!exerciciosEtapa) return [];
     const temMultiplasEtapas = exerciciosEtapa.some((ex: any) => ex.etapa !== undefined);
     if (temMultiplasEtapas) {
-      return exerciciosEtapa.filter((ex: any) => ex.etapa === etapaSelecionada);
+      return exerciciosFiltradosHelper(exerciciosEtapa, etapaSelecionada); // mantido com segurança abaixo
     }
     return exerciciosEtapa;
   }, [exerciciosEtapa, etapaSelecionada]);
 
-  const exercicioAtivo = exerciciosFiltrados[indiceAtual] || exercicioAtual;
+  // Função auxiliar interna para garantir o filtro correto por etapa
+  function exerciciosFiltradosHelper(lista: any[], etapa: number) {
+    return lista.filter((ex: any) => {
+      const etapaEx = ex.stage !== undefined ? ex.stage : (ex.etapa !== undefined ? ex.etapa : 1);
+      return etapaEx === etapa;
+    });
+  }
+
+  const exerciciosProntos = useMemo(() => {
+    if (!exerciciosEtapa) return [];
+    const filtrados = exerciciosEtapa.filter((ex: any) => {
+      const etapaEx = ex.stage !== undefined ? ex.stage : (ex.etapa !== undefined ? ex.etapa : 1);
+      return etapaEx === etapaSelecionada;
+    });
+    return filtrados.length > 0 ? filtrados : exerciciosEtapa;
+  }, [exerciciosEtapa, etapaSelecionada]);
+
+  const exercicioAtivo = exerciciosProntos[indiceAtual] || exercicioAtual;
 
   if (!exercicioAtivo) return null;
 
@@ -69,6 +86,21 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
   };
 
   const renderizarInstrucao = () => {
+    const noLower = noAtivo.toLowerCase();
+    
+    // Instrução dinâmica e individual para a Etapa 3 de Altura (conforme o alvo sorteado)
+    if (noLower.includes('altura') && etapaSelecionada === 3) {
+      const direcaoTexto = (exercicioAtivo.alvo === 'AGUDA' || exercicioAtivo.alvo === 'ASCENDENTE') 
+        ? 'GRAVE -> AGUDO' 
+        : 'AGUDO -> GRAVE';
+      return <>Ouça os dois sons. Qual deles faz o movimento <span className="text-primary font-bold">{direcaoTexto}</span>?</>;
+    }
+
+    // Instrução específica para a Etapa 3 de Duração (Sequência Rítmica)
+    if (noLower.includes('dura') && etapaSelecionada === 3) {
+      return <>Ouça os dois sons. Qual deles possui a sequência <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
+    }
+
     if (eMundoDois) {
         switch (noAtivo) {
         case 'ritmo':
@@ -91,12 +123,30 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
       }
     }
 
-    const noLower = noAtivo.toLowerCase();
-    if ((noLower.includes('altura') || noLower.includes('dura') || noLower.includes('intensidade')) && etapaSelecionada === 2) {
+    if ((noLower.includes('altura') || noLower.includes('dura') || noLower.includes('intensidade')) && (etapaSelecionada === 2 || etapaSelecionada === 3)) {
       return <>Ouça os dois sons. Qual deles possui o som mais <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
     }
 
     return <>Ouça os dois sons. Qual deles {noLower.includes('timbre') || noLower.includes('densidade') ? 'é o som' : 'possui o som mais'} <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
+  };
+
+  // Função auxiliar para definir os rótulos das opções de resposta na Etapa 3
+  const obterRotuloOpcaoPersonalizado = (letra: string) => {
+    const noLower = noAtivo.toLowerCase();
+    if (noLower.includes('altura') && etapaSelecionada === 3) {
+      const direcaoTexto = (exercicioAtivo.alvo === 'AGUDA' || exercicioAtivo.alvo === 'ASCENDENTE') 
+        ? 'Grave -> Agudo' 
+        : 'Agudo -> Grave';
+      return `Som ${letra} faz o movimento ${direcaoTexto}`;
+    }
+    // Para a Etapa 3 de Duração, as opções indicam que aquele som é a sequência correta
+    if (noLower.includes('dura') && etapaSelecionada === 3) {
+      return `Som ${letra} é a sequência correta`;
+    }
+    if (eMundoDois) {
+      return getWorld2OptionLabel(letra, exercicioAtivo);
+    }
+    return obterRotuloOpcao(letra, exercicioAtivo, noAtivo);
   };
 
   const noLower = noAtivo.toLowerCase();
@@ -106,14 +156,14 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
     <>
       <section className="xl:col-span-5 rounded-xl bg-surface-container border border-outline-variant/40 p-6 flex flex-col justify-between shadow-2xl">
         <div>
-          {/* Header Status + Mini-Seletor de Etapas (E1 / E2) */}
+          {/* Header Status + Mini-Seletor de Etapas (E1 / E2 / E3) */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-3">
               <span className="text-caption-signal font-caption-signal text-primary font-bold uppercase tracking-wider">
                 {noAtivo.toUpperCase()}
               </span>
 
-              {/* Seletor Compacto E1 / E2 ativado para todos os nós */}
+              {/* Seletor Compacto E1 / E2 / E3 */}
               {mostraSeletorEtapas && (
                 <div className="flex items-center bg-surface-container-lowest border border-outline-variant/60 rounded-full p-0.5">
                   <button
@@ -138,6 +188,20 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
                   >
                     E2
                   </button>
+                  {/* Botão E3 ativado para Altura e Duração */}
+                  {(noLower.includes('altura') || noLower.includes('dura')) && (
+                    <button
+                      type="button"
+                      onClick={() => aoSelecionarEtapa(3)}
+                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                        etapaSelecionada === 3
+                          ? 'bg-primary/20 text-primary border border-primary/50 shadow-sm'
+                          : 'text-on-surface-variant/60 hover:text-on-surface'
+                      }`}
+                    >
+                      E3
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -154,7 +218,7 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
           <div className="flex justify-between items-baseline mb-4">
             <h2 className="text-headline-md font-headline-md text-on-surface">{exercicioAtivo.titulo}</h2>
             <span className="text-xs font-label-mono text-on-surface-variant">
-              Exercício {indiceAtual + 1} de {exerciciosFiltrados.length || exerciciosEtapa.length}
+              Exercício {indiceAtual + 1} de {exerciciosProntos.length || exerciciosEtapa.length}
             </span>
           </div>
 
@@ -198,8 +262,8 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
           {/* Opções de Resposta */}
           <div className="flex flex-col gap-2.5 mb-6">
             {[
-              { id: 'A', label: eMundoDois ? getWorld2OptionLabel('A', exercicioAtivo) : obterRotuloOpcao('A', exercicioAtivo, noAtivo) },
-              { id: 'B', label: eMundoDois ? getWorld2OptionLabel('B', exercicioAtivo) : obterRotuloOpcao('B', exercicioAtivo, noAtivo) },
+              { id: 'A', label: obterRotuloOpcaoPersonalizado('A') },
+              { id: 'B', label: obterRotuloOpcaoPersonalizado('B') },
               { id: 'EQUAL', label: 'Ambos são iguais' }
             ].map((opcao) => (
               <div
@@ -237,7 +301,7 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
           <div className="grid grid-cols-3 text-xs font-label-mono text-on-surface-variant mt-3 pt-2 border-t border-outline-variant/20 text-center">
             <div>XP: <strong className="text-yellow-400">{xp}</strong></div>
             <div>Erros: <strong className="text-rose-400">{erros}</strong></div>
-            <div>Progresso: <strong className="text-primary">{indiceAtual + 1}/{exerciciosFiltrados.length || exerciciosEtapa.length}</strong></div>
+            <div>Progresso: <strong className="text-primary">{indiceAtual + 1}/{exerciciosProntos.length || exerciciosEtapa.length}</strong></div>
           </div>
         </div>
       </section>
@@ -245,7 +309,7 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
       <ModeloEtapaCompleta 
         estaAberto={mostrarModalConclusao}
         erros={erros}
-        totalExercicios={exerciciosFiltrados.length || exerciciosEtapa.length}
+        totalExercicios={exerciciosProntos.length || exerciciosEtapa.length}
         aoReiniciar={aoReiniciarEtapa}
         noAtivo={noAtivo}
         etapaSelecionada={etapaSelecionada}

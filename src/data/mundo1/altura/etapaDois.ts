@@ -3,32 +3,32 @@ import { ExercicioAltura } from './types';
 export const gerarEtapaDoisAltura = (): ExercicioAltura[] => {
   const pares = [
     {
-      titulo: "Altura - Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/violao_A2.mp3',
       agudo: '/audio/altura/etapa2/violao_C4.mp3'
     },
     {
-      titulo: "Altura — Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/piano_E2.mp3',
       agudo: '/audio/altura/etapa2/piano_E4.mp3'
     },
     {
-      titulo: "Altura — Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/violao_C3.mp3',
       agudo: '/audio/altura/etapa2/violao_G4.mp3'
     },
     {
-      titulo: "Altura — Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/pam_G3.mp3',
       agudo: '/audio/altura/etapa2/pam_A4.mp3'
     },
     {
-      titulo: "Altura — Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/trumpet_D3.mp3',
       agudo: '/audio/altura/etapa2/trumpet_B3.mp3'
     },
     {
-      titulo: "Altura — Instrumentos",
+      titulo: "",
       grave: '/audio/altura/etapa2/violino_C5.mp3',
       agudo: '/audio/altura/etapa2/violino_E6.mp3'
     }

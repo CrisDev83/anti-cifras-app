@@ -3,27 +3,27 @@ import { ExercicioAltura } from './types';
 export const gerarEtapaUmAltura = (): ExercicioAltura[] => {
   const pares = [
     {
-      titulo: "Altura — Sons do Dia a Dia",
+      titulo: "",
       grave: '/audio/altura/etapa1/latidoGrave.mp3',
       agudo: '/audio/altura/etapa1/latidoAgudo.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia",
+      titulo: "",
       grave: '/audio/altura/etapa1/motorGrave.mp3',
       agudo: '/audio/altura/etapa1/motorAgudo.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia",
+      titulo: "",
       grave: '/audio/timbre/etapa1/rugidoLeao.mp3',
       agudo: '/audio/timbre/etapa1/miadoGato.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia",
+      titulo: "",
       grave: '/audio/altura/etapa1/vozMasculina.mp3',
       agudo: '/audio/altura/etapa1/vozFeminina.mp3'
     },
     {
-      titulo: "Altura — Sons do Dia a Dia",
+      titulo: "",
       grave: '/audio/altura/etapa1/buzinaNavio.mp3',
       agudo: '/audio/altura/etapa1/buzinaMoto.mp3'
     }

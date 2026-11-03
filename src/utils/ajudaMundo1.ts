@@ -5,8 +5,10 @@ import {
   gerarEtapaUmDensidade 
 } from '@/data/mundo1';
 import { gerarEtapaDoisAltura } from '@/data/mundo1/altura/etapaDois';
+import { gerarEtapaTresAltura } from '@/data/mundo1/altura/etapaTres';
 import { gerarEtapaDoisDensidade } from '@/data/mundo1/densidade/etapaDois';
 import { gerarEtapaDoisDuracao } from '@/data/mundo1/duracao/etapaDois';
+import { gerarEtapaTresDuracao } from '@/data/mundo1/duracao/etapaTres';
 import { gerarEtapaDoisIntensidade } from '@/data/mundo1/intensidade/etapaDois';
 import { gerarEtapaUmTimbre } from '@/data/mundo1/timbre/etapaUm';
 import { gerarEtapaDoisTimbre } from '@/data/mundo1/timbre/etapaDois';
@@ -17,7 +19,8 @@ export const buscarExerciciosParaNo = (no: string) => {
   if (noLower.includes('dura')) {
     const exerciciosEtapa1 = gerarEtapaUmDuracao ? gerarEtapaUmDuracao() : [];
     const exerciciosEtapa2 = gerarEtapaDoisDuracao ? gerarEtapaDoisDuracao() : [];
-    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+    const exerciciosEtapa3 = gerarEtapaTresDuracao ? gerarEtapaTresDuracao() : [];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2, ...exerciciosEtapa3];
   } else if (noLower.includes('timbre')) {
     const exerciciosEtapa1 = gerarEtapaUmTimbre ? gerarEtapaUmTimbre() : [];
     const exerciciosEtapa2 = gerarEtapaDoisTimbre ? gerarEtapaDoisTimbre() : [];
@@ -31,11 +34,12 @@ export const buscarExerciciosParaNo = (no: string) => {
     const exerciciosEtapa2 = gerarEtapaDoisDensidade ? gerarEtapaDoisDensidade() : [];
     return [...exerciciosEtapa1, ...exerciciosEtapa2];
   } else {
-    // Para a ALTURA, juntamos a Etapa 1 e a Etapa 2 para o hook conseguir filtrar a que o utilizador escolheu!
+    // Para a ALTURA, juntamos a Etapa 1, Etapa 2 e Etapa 3!
     const exerciciosEtapa1 = gerarEtapaUmAltura ? gerarEtapaUmAltura() : [];
     const exerciciosEtapa2 = gerarEtapaDoisAltura ? gerarEtapaDoisAltura() : [];
+    const exerciciosEtapa3 = gerarEtapaTresAltura ? gerarEtapaTresAltura() : [];
     
-    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+    return [...exerciciosEtapa1, ...exerciciosEtapa2, ...exerciciosEtapa3];
   }
 };
 
@@ -45,6 +49,16 @@ export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
 
   switch (true) {
     case noLower.includes('dura'):
+      // Se for da Etapa 3 (padrões compostos), devolve o rótulo descritivo do padrão
+      if (exercicio?.etapa === 3) {
+        const mapaPadroes: Record<string, string> = {
+          'CURTO_CURTO_LONGO': 'Curto — Curto — Longo',
+          'LONGO_CURTO_CURTO': 'Longo — Curto — Curto',
+          'CURTO_LONGO_CURTO': 'Curto — Longo — Curto',
+          'LONGO_LONGO_CURTO': 'Longo — Longo — Curto'
+        };
+        return mapaPadroes[alvoBruto] || alvoBruto;
+      }
       return alvoBruto === 'LONGO' ? 'LONGO' : 'CURTO';
     case noLower.includes('intensidade'):
       return alvoBruto === 'FORTE' ? 'FORTE' : 'FRACO';
@@ -63,7 +77,13 @@ export const obterRotuloOpcao = (letra: string, exercicio: any, noAtivo: string)
 
   if (noLower.includes('timbre')) return `Som ${letra} é ${rotuloAlvo}`;
   if (noLower.includes('densidade')) return `Som ${letra} é ${rotuloAlvo?.toLowerCase()}`;
-  if (noLower.includes('dura')) return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
+  if (noLower.includes('dura')) {
+    // Se for a Etapa 3, o botão indica qual é o padrão rítmico daquele som
+    if (exercicio?.etapa === 3) {
+      return `Som ${letra}: ${rotuloAlvo}`;
+    }
+    return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
+  }
   if (noLower.includes('intensidade')) return `Som ${letra} é mais ${rotuloAlvo?.toLowerCase()}`;
   return `Som ${letra} é mais ${rotuloAlvo === 'AGUDA' ? 'agudo' : 'grave'}`;
 };

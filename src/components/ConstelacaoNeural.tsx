@@ -13,8 +13,8 @@ export interface ItemNo {
   top: string;
   progresso?: string;
   progress?: string;
-  etapasConcluidas?: number; // Adicionado para suportar progresso dinâmico
-  totalEtapas?: number;      // Adicionado para suportar total dinâmico
+  etapasConcluidas?: number; 
+  totalEtapas?: number;      
 }
 
 interface PropConstelacaoNeural {
@@ -22,6 +22,16 @@ interface PropConstelacaoNeural {
   aoSelecionarNo: (noId: string) => void;
   nos: ItemNo[];
 }
+
+// Função auxiliar interna para definir o total de etapas de cada nó
+const obterTotalEtapas = (idNo: string): number => {
+  const lower = idNo.toLowerCase();
+  // Altura e Duração passam a ter 3 etapas; os restantes continuam com 2
+  if (lower.includes('altura') || lower.includes('dura')) {
+    return 3;
+  }
+  return 2;
+};
 
 // Ícones padrão por ID de nó caso venham em falta nas props
 const ICONES_PADRAO: Record<string, string> = {
@@ -84,14 +94,19 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
           const rotuloFinal = no.rotulo || no.label || no.id;
           const iconeFinal = no.icone || no.icon || ICONES_PADRAO[no.id] || 'radio_button_checked';
           
-          // Cálculo dinâmico das etapas (ex: 0/2, 1/2) com fallback seguro
-          const progressoTexto = no.progresso || no.progress || '0/2';
-          const [concluidasStr, totalStr] = progressoTexto.split('/');
-          const concluidas = parseInt(concluidasStr) || 0;
-          const total = parseInt(totalStr) || 2;
+          // Obtém o total real de etapas dinamicamente (3 para altura e duração, 2 para os outros)
+          const totalEtapasReal = obterTotalEtapas(no.id);
           
-          // Verifica se o nó está totalmente concluído
-          const estaCompleto = concluidas >= total;
+          // Cálculo dinâmico das etapas
+          const progressoTexto = no.progresso || no.progress || `0/${totalEtapasReal}`;
+          const [concluidasStr] = progressoTexto.split('/');
+          const concluidas = parseInt(concluidasStr) || 0;
+          
+          // Formata o texto do crachá garantindo que usa o total correto (ex: 0/3)
+          const progressoExibido = `${concluidas}/${totalEtapasReal}`;
+          
+          // Verifica se o nó está totalmente concluído com base no total correto
+          const estaCompleto = concluidas >= totalEtapasReal;
 
           return (
             <div 
@@ -121,7 +136,7 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
                     ? 'bg-amber-400 text-slate-950' 
                     : 'bg-primary text-on-primary'
                 }`}>
-                  {progressoTexto}
+                  {progressoExibido}
                 </span>
               </div>
               <div className="mt-2 flex flex-col items-center">
