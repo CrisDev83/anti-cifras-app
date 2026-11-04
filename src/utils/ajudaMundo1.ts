@@ -12,6 +12,7 @@ import { gerarEtapaTresDuracao } from '@/data/mundo1/duracao/etapaTres';
 import { gerarEtapaDoisIntensidade } from '@/data/mundo1/intensidade/etapaDois';
 import { gerarEtapaUmTimbre } from '@/data/mundo1/timbre/etapaUm';
 import { gerarEtapaDoisTimbre } from '@/data/mundo1/timbre/etapaDois';
+import { gerarEtapaTresTimbre } from '@/data/mundo1/timbre/etapaTres'; // <-- Importação da Etapa 3 de Timbre
 
 export const buscarExerciciosParaNo = (no: string) => {
   const noLower = no.toLowerCase();
@@ -24,7 +25,8 @@ export const buscarExerciciosParaNo = (no: string) => {
   } else if (noLower.includes('timbre')) {
     const exerciciosEtapa1 = gerarEtapaUmTimbre ? gerarEtapaUmTimbre() : [];
     const exerciciosEtapa2 = gerarEtapaDoisTimbre ? gerarEtapaDoisTimbre() : [];
-    return [...exerciciosEtapa1, ...exerciciosEtapa2];
+    const exerciciosEtapa3 = gerarEtapaTresTimbre ? gerarEtapaTresTimbre() : []; // <-- Adicionado aqui
+    return [...exerciciosEtapa1, ...exerciciosEtapa2, ...exerciciosEtapa3];
   } else if (noLower.includes('intensidade')) {
     const exerciciosEtapa1 = gerarEtapaUmIntensidade ? gerarEtapaUmIntensidade() : [];
     const exerciciosEtapa2 = gerarEtapaDoisIntensidade ? gerarEtapaDoisIntensidade() : [];
@@ -49,7 +51,6 @@ export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
 
   switch (true) {
     case noLower.includes('dura'):
-      // Se for da Etapa 3 (padrões compostos), devolve o rótulo descritivo do padrão
       if (exercicio?.etapa === 3) {
         const mapaPadroes: Record<string, string> = {
           'CURTO_CURTO_LONGO': 'Curto — Curto — Longo',
@@ -65,6 +66,10 @@ export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
     case noLower.includes('densidade'):
       return alvoBruto === 'MAIS_DENSO' ? 'MAIS DENSO' : 'MENOS DENSO';
     case noLower.includes('timbre'):
+      // Se for a Etapa 3 de Timbre, devolve o rótulo em maiúsculas (ex: PIANO + VIOLÃO)
+      if (exercicio?.etapa === 3) {
+        return alvoBruto?.toUpperCase();
+      }
       return alvoBruto;
     default:
       return alvoBruto === 'AGUDA' ? 'AGUDA' : 'GRAVE';
@@ -75,10 +80,14 @@ export const obterRotuloOpcao = (letra: string, exercicio: any, noAtivo: string)
   const rotuloAlvo = obterRotuloAlvo(exercicio, noAtivo);
   const noLower = noAtivo.toLowerCase();
 
-  if (noLower.includes('timbre')) return `Som ${letra} é ${rotuloAlvo}`;
+  if (noLower.includes('timbre')) {
+    if (exercicio?.etapa === 3) {
+      return `Som ${letra} é a combinação ${rotuloAlvo}`;
+    }
+    return `Som ${letra} é ${rotuloAlvo}`;
+  }
   if (noLower.includes('densidade')) return `Som ${letra} é ${rotuloAlvo?.toLowerCase()}`;
   if (noLower.includes('dura')) {
-    // Se for a Etapa 3, o botão indica qual é o padrão rítmico daquele som
     if (exercicio?.etapa === 3) {
       return `Som ${letra}: ${rotuloAlvo}`;
     }

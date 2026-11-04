@@ -45,7 +45,7 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
     if (!exerciciosEtapa) return [];
     const temMultiplasEtapas = exerciciosEtapa.some((ex: any) => ex.etapa !== undefined);
     if (temMultiplasEtapas) {
-      return exerciciosFiltradosHelper(exerciciosEtapa, etapaSelecionada); // mantido com segurança abaixo
+      return exerciciosFiltradosHelper(exerciciosEtapa, etapaSelecionada);
     }
     return exerciciosEtapa;
   }, [exerciciosEtapa, etapaSelecionada]);
@@ -69,12 +69,26 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
 
   const exercicioAtivo = exerciciosProntos[indiceAtual] || exercicioAtual;
 
-  if (!exercicioAtivo) return null;
+  // Lógica separada de Rótulos por Mundo (calculada antes de qualquer retorno condicional)
+  const rotuloAlvoBruto = useMemo(() => {
+    if (!exercicioAtivo) return '';
+    return eMundoDois 
+      ? getWorld2TargetLabel(exercicioAtivo, noAtivo) 
+      : obterRotuloAlvo(exercicioAtivo, noAtivo);
+  }, [exercicioAtivo, eMundoDois, noAtivo]);
 
-  // Lógica separada de Rótulos por Mundo
-  const rotuloAlvo = eMundoDois 
-    ? getWorld2TargetLabel(exercicioAtivo, noAtivo) 
-    : obterRotuloAlvo(exercicioAtivo, noAtivo);
+  // Formatação em LETRAS MAIÚSCULAS para a Etapa 3 de Duração
+  const rotuloAlvo = useMemo(() => {
+    if (noAtivo.toLowerCase().includes('dura') && etapaSelecionada === 3 && typeof rotuloAlvoBruto === 'string') {
+      return rotuloAlvoBruto
+        .toUpperCase()
+        .replace(/_/g, ' — ');
+    }
+    return rotuloAlvoBruto;
+  }, [rotuloAlvoBruto, noAtivo, etapaSelecionada]);
+
+  // Verificação de segurança após todos os Hooks estarem declarados
+  if (!exercicioAtivo) return null;
 
   // Função para mudar a etapa e reiniciar o progresso da sessão
   const aoSelecionarEtapa = (etapa: number) => {
@@ -188,8 +202,8 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
                   >
                     E2
                   </button>
-                  {/* Botão E3 ativado para Altura e Duração */}
-                  {(noLower.includes('altura') || noLower.includes('dura')) && (
+                  {/* Botão E3 ativado para Altura, Duração e Timbre */}
+                  {(noLower.includes('altura') || noLower.includes('dura') || noLower.includes('timbre')) && (
                     <button
                       type="button"
                       onClick={() => aoSelecionarEtapa(3)}
