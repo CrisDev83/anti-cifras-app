@@ -1,90 +1,86 @@
 import { ExercicioTimbre } from "./types";
 
 export const gerarEtapaDoisTimbre = (): ExercicioTimbre[] => {
-  // Pares de instrumentos musicais para a Etapa 2
-  const paresInstrumentos = [
-    {
-      titulo: "Timbre — Instrumentos Musicais",
-      somA: { nome: "Violão", src: '/audio/harmonia/acordesViolao.mp3' },
-      somB: { nome: "Flauta", src: '/audio/melodia/melodiaFlauta.mp3' }
-    },
-    {
-      titulo: "Timbre — Instrumentos Musicais",
-      somA: { nome: "Piano", src: '/audio/timbre/etapa2/piano.mp3' },
-      somB: { nome: "Violino", src: '/audio/densidade/etapa2/solo_violino.mp3' }
-    },
-    {
-      titulo: "Timbre — Instrumentos Musicais",
-      somA: { nome: "Guitarra Elétrica", src: '/audio/melodia/soloGuitar.mp3' },
-      somB: { nome: "Baixo Elétrico", src: '/audio/timbre/etapa2/baixo.mp3' }
-    },
-    {
-      titulo: "Timbre — Instrumentos Musicais",
-      somA: { nome: "Trompete", src: '/audio/timbre/etapa2/trompete.mp3' },
-      somB: { nome: "Violoncelo", src: '/audio/timbre/etapa2/acordeon.mp3' }
-    },
-    {
-      titulo: "Timbre — Instrumentos Musicais",
-      somA: { nome: "Saxofone", src: '/audio/melodia/saxSolo.mp3' },
-      somB: { nome: "Bateria", src: '/audio/ritmo/bateraRock.mp3' }
-    }
+  // 1. Banco central com todos os instrumentos e respetivos áudios da Etapa 2
+  const bancoDeSons = [
+    { nome: "Violão", src: '/audio/harmonia/acordesViolao.mp3' },
+    { nome: "Flauta", src: '/audio/melodia/melodiaFlauta.mp3' },
+    { nome: "Piano", src: '/audio/timbre/etapa2/piano.mp3' },
+    { nome: "Violino", src: '/audio/densidade/etapa2/solo_violino.mp3' },
+    { nome: "Guitarra Elétrica", src: '/audio/melodia/soloGuitar.mp3' },
+    { nome: "Baixo Elétrico", src: '/audio/timbre/etapa2/baixo.mp3' },
+    { nome: "Trompete", src: '/audio/timbre/etapa2/trompete.mp3' },
+    { nome: "Violoncelo", src: '/audio/timbre/etapa2/acordeon.mp3' },
+    { nome: "Saxofone", src: '/audio/melodia/saxSolo.mp3' },
+    { nome: "Bateria", src: '/audio/ritmo/bateraRock.mp3' }
   ];
 
   const exerciciosBrutos: Omit<ExercicioTimbre, 'id' | 'numeroQuestao'>[] = [];
 
-  // 1. Cria exercícios de contraste entre instrumentos
-  for (let i = 0; i < 4; i++) {
-    const parAleatorio = paresInstrumentos[Math.floor(Math.random() * paresInstrumentos.length)];
+  // Função auxiliar para escolher um item aleatório do banco
+  const pegarItemAleatorio = (lista: typeof bancoDeSons) => 
+    lista[Math.floor(Math.random() * lista.length)];
 
-    const eA = Math.random() < 0.5;
-    const objetoSomA = eA ? parAleatorio.somA : parAleatorio.somB;
-    const objetoSomB = eA ? parAleatorio.somB : parAleatorio.somA;
+  // 1. Cria exatamente 4 exercícios de contraste entre instrumentos escolhidos aleatoriamente
+  for (let i = 0; i < 4; i++) {
+    const somItem1 = pegarItemAleatorio(bancoDeSons);
+    
+    // Garante que o segundo som é diferente do primeiro
+    let somItem2 = pegarItemAleatorio(bancoDeSons);
+    while (somItem2.src === somItem1.src) {
+      somItem2 = pegarItemAleatorio(bancoDeSons);
+    }
+
+    const inverter = Math.random() < 0.5;
+
+    const objetoSomA = inverter ? somItem2 : somItem1;
+    const objetoSomB = inverter ? somItem1 : somItem2;
 
     const pedirA = Math.random() < 0.5;
-    const nomeAlvo = pedirA ? parAleatorio.somA.nome : parAleatorio.somB.nome;
+    const nomeAlvo = pedirA ? somItem1.nome : somItem2.nome;
 
     let respostaCerta: 'A' | 'B';
     if (pedirA) {
-      respostaCerta = eA ? 'A' : 'B';
+      respostaCerta = inverter ? 'B' : 'A';
     } else {
-      respostaCerta = eA ? 'B' : 'A';
+      respostaCerta = inverter ? 'A' : 'B';
     }
 
     exerciciosBrutos.push({
-      etapa: 2, // Atenção que aqui já é a etapa 2
-      titulo: parAleatorio.titulo,
+      etapa: 2,
+      titulo: "Timbre — Instrumentos Musicais",
       alvo: nomeAlvo,
       somA: { rotulo: "Som 01", src: objetoSomA.src },
       somB: { rotulo: "Som 02", src: objetoSomB.src },
       respostaCerta,
-      dificuldade: 'médio' // Um bocadinho mais avançado por serem instrumentos
+      dificuldade: 'médio'
     });
   }
 
-  // 2. Cria exercícios onde os instrumentos tocados são IGUAIS
+  // 2. Cria exatamente 1 exercício onde os instrumentos tocados são IGUAIS
   for (let i = 0; i < 1; i++) {
-    const parAleatorio = paresInstrumentos[Math.floor(Math.random() * paresInstrumentos.length)];
-    const usarPrimeiro = Math.random() < 0.5;
-    const objetoSomIgual = usarPrimeiro ? parAleatorio.somA : parAleatorio.somB;
+    const somIgual = pegarItemAleatorio(bancoDeSons);
 
     exerciciosBrutos.push({
       etapa: 2,
-      titulo: parAleatorio.titulo,
-      alvo: objetoSomIgual.nome,
-      somA: { rotulo: "Som 01", src: objetoSomIgual.src },
-      somB: { rotulo: "Som 02", src: objetoSomIgual.src },
+      titulo: "Timbre — Instrumentos Musicais",
+      alvo: somIgual.nome,
+      somA: { rotulo: "Som 01", src: somIgual.src },
+      somB: { rotulo: "Som 02", src: somIgual.src },
       respostaCerta: 'EQUAL',
       dificuldade: 'médio'
     });
   }
 
-  // 3. Baralha o lote
+  // 3. Baralha o lote completo de exercícios gerados
   const listaBaralhada = exerciciosBrutos.sort(() => Math.random() - 0.5);
 
-  // 4. Atribui IDs e números de questão
+  // 4. Atribui IDs e números de questão definitivos
   return listaBaralhada.map((ex, indice) => ({
     ...ex,
     id: indice + 1,
     numeroQuestao: indice + 1
   }));
 };
+
+export const todosExerciciosEtapaDoisTimbre: ExercicioTimbre[] = gerarEtapaDoisTimbre();

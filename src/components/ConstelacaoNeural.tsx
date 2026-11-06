@@ -26,8 +26,8 @@ interface PropConstelacaoNeural {
 // Função auxiliar interna para definir o total de etapas de cada nó
 const obterTotalEtapas = (idNo: string): number => {
   const lower = idNo.toLowerCase();
-  // Altura e Duração passam a ter 3 etapas; os restantes continuam com 2
-  if (lower.includes('altura') || lower.includes('dura')) {
+  // Altura, Duração e Timbre passam a ter 3 etapas; os restantes continuam com 2
+  if (lower.includes('altura') || lower.includes('dura') || lower.includes('timbre')) {
     return 3;
   }
   return 2;
@@ -94,7 +94,7 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
           const rotuloFinal = no.rotulo || no.label || no.id;
           const iconeFinal = no.icone || no.icon || ICONES_PADRAO[no.id] || 'radio_button_checked';
           
-          // Obtém o total real de etapas dinamicamente (3 para altura e duração, 2 para os outros)
+          // Obtém o total real de etapas dinamicamente (3 para altura, duração e timbre, 2 para os outros)
           const totalEtapasReal = obterTotalEtapas(no.id);
           
           // Cálculo dinâmico das etapas

@@ -12,7 +12,7 @@ import { gerarEtapaTresDuracao } from '@/data/mundo1/duracao/etapaTres';
 import { gerarEtapaDoisIntensidade } from '@/data/mundo1/intensidade/etapaDois';
 import { gerarEtapaUmTimbre } from '@/data/mundo1/timbre/etapaUm';
 import { gerarEtapaDoisTimbre } from '@/data/mundo1/timbre/etapaDois';
-import { gerarEtapaTresTimbre } from '@/data/mundo1/timbre/etapaTres'; // <-- Importação da Etapa 3 de Timbre
+import { gerarEtapaTresTimbre } from '@/data/mundo1/timbre/etapaTres';
 
 export const buscarExerciciosParaNo = (no: string) => {
   const noLower = no.toLowerCase();
@@ -25,7 +25,7 @@ export const buscarExerciciosParaNo = (no: string) => {
   } else if (noLower.includes('timbre')) {
     const exerciciosEtapa1 = gerarEtapaUmTimbre ? gerarEtapaUmTimbre() : [];
     const exerciciosEtapa2 = gerarEtapaDoisTimbre ? gerarEtapaDoisTimbre() : [];
-    const exerciciosEtapa3 = gerarEtapaTresTimbre ? gerarEtapaTresTimbre() : []; // <-- Adicionado aqui
+    const exerciciosEtapa3 = gerarEtapaTresTimbre ? gerarEtapaTresTimbre() : [];
     return [...exerciciosEtapa1, ...exerciciosEtapa2, ...exerciciosEtapa3];
   } else if (noLower.includes('intensidade')) {
     const exerciciosEtapa1 = gerarEtapaUmIntensidade ? gerarEtapaUmIntensidade() : [];
@@ -36,7 +36,6 @@ export const buscarExerciciosParaNo = (no: string) => {
     const exerciciosEtapa2 = gerarEtapaDoisDensidade ? gerarEtapaDoisDensidade() : [];
     return [...exerciciosEtapa1, ...exerciciosEtapa2];
   } else {
-    // Para a ALTURA, juntamos a Etapa 1, Etapa 2 e Etapa 3!
     const exerciciosEtapa1 = gerarEtapaUmAltura ? gerarEtapaUmAltura() : [];
     const exerciciosEtapa2 = gerarEtapaDoisAltura ? gerarEtapaDoisAltura() : [];
     const exerciciosEtapa3 = gerarEtapaTresAltura ? gerarEtapaTresAltura() : [];
@@ -66,7 +65,6 @@ export const obterRotuloAlvo = (exercicio: any, noAtivo: string) => {
     case noLower.includes('densidade'):
       return alvoBruto === 'MAIS_DENSO' ? 'MAIS DENSO' : 'MENOS DENSO';
     case noLower.includes('timbre'):
-      // Se for a Etapa 3 de Timbre, devolve o rótulo em maiúsculas (ex: PIANO + VIOLÃO)
       if (exercicio?.etapa === 3) {
         return alvoBruto?.toUpperCase();
       }
