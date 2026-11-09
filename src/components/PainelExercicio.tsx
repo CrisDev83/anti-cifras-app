@@ -40,6 +40,13 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
     aoReiniciarEtapa
   } = useSessaoExercicio(noAtivo, mundoAtual, etapaSelecionada);
 
+  // Efeito corretor: Regista a conclusão da etapa assim que o modal de conclusão é ativado
+  useEffect(() => {
+    if (mostrarModalConclusao && aoConcluirEtapa) {
+      aoConcluirEtapa(noAtivo, etapaSelecionada);
+    }
+  }, [mostrarModalConclusao, noAtivo, etapaSelecionada, aoConcluirEtapa]);
+
   // 2. Filtro por segurança caso o hook traga o array total
   const exerciciosFiltrados = useMemo(() => {
     if (!exerciciosEtapa) return [];
@@ -115,6 +122,11 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
       return <>Ouça os dois sons. Qual deles possui a sequência <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
     }
 
+    // Instrução específica para a Etapa 3 de Intensidade, Timbre e Densidade
+    if ((noLower.includes('intensidade') || noLower.includes('timbre') || noLower.includes('densidade')) && etapaSelecionada === 3) {
+      return <>Ouça os dois sons. Qual deles corresponde a <span className="text-primary font-bold">{rotuloAlvo}</span>?</>;
+    }
+
     if (eMundoDois) {
         switch (noAtivo) {
         case 'ritmo':
@@ -153,7 +165,10 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
         : 'Agudo -> Grave';
       return `Som ${letra} faz o movimento ${direcaoTexto}`;
     }
-    // Para a Etapa 3 de Duração, as opções indicam que aquele som é a sequência correta
+    // Para a Etapa 3 de Timbre, Intensidade e Densidade, as opções indicam a combinação/padrão
+    if ((noLower.includes('timbre') || noLower.includes('intensidade') || noLower.includes('densidade')) && etapaSelecionada === 3) {
+      return `Som ${letra} é ${rotuloAlvo}`;
+    }
     if (noLower.includes('dura') && etapaSelecionada === 3) {
       return `Som ${letra} é a sequência correta`;
     }
@@ -202,8 +217,8 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
                   >
                     E2
                   </button>
-                  {/* Botão E3 ativado para Altura, Duração e Timbre */}
-                  {(noLower.includes('altura') || noLower.includes('dura') || noLower.includes('timbre')) && (
+                  {/* Botão E3 ativado para Altura, Duração, Timbre, Intensidade e Densidade */}
+                  {(noLower.includes('altura') || noLower.includes('dura') || noLower.includes('timbre') || noLower.includes('intensidade') || noLower.includes('densidade')) && (
                     <button
                       type="button"
                       onClick={() => aoSelecionarEtapa(3)}

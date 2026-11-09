@@ -3,7 +3,7 @@ export interface ExercicioIntensidade {
   etapa: number;
   numeroQuestao: number;
   titulo: string;
-  alvo: 'FORTE' | 'FRACO' | 'IGUAL';
+  alvo: 'FORTE' | 'FRACO' | 'IGUAL' | string; // <-- Permite rótulos textuais livres (ex: 'BANDA — INTENSO')
   somA: { 
     rotulo: string; 
     src: string; 
@@ -14,6 +14,6 @@ export interface ExercicioIntensidade {
     src: string; 
     volume?: number; 
   };
-  respostaCerta: 'A' | 'B' | 'EQUAL'; // <-- Alinhado para EQUAL
+  respostaCerta: 'A' | 'B' | 'EQUAL';
   dificuldade: 'fácil' | 'médio' | 'difícil' | 'perito';
 }

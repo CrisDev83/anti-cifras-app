@@ -25,14 +25,26 @@ export function useSessaoExercicio(noAtivo: string, mundoAtual: string, etapaSel
     stopCurrentAudio();
     const todosExercicios = carregarExercicios();
     
-    // Filtra suportando tanto 'stage' quanto 'etapa' de forma segura
+    // Filtro estrito por etapa (suportando 'stage' ou 'etapa')
     const filtrados = todosExercicios.filter((ex: any) => {
       const etapaEx = ex.stage !== undefined ? ex.stage : (ex.etapa !== undefined ? ex.etapa : 1);
-      return etapaEx === etapaSelecionada;
+      return Number(etapaEx) === Number(etapaSelecionada);
     });
 
-    // Se o filtro retornar vazio por incompatibilidade, garante que mostra todos para não travar
-    setExerciciosEtapa(filtrados.length > 0 ? filtrados : todosExercicios);
+    // Se não houver exercícios filtrados especificamente para a E2 ou E3, 
+    // separamos a lista total em fatias para garantir que cada etapa tem o seu conteúdo único
+    let exerciciosFinais = filtrados;
+    if (exerciciosFinais.length === 0 && todosExercicios.length > 0) {
+      const tamanhoFatia = Math.ceil(todosExercicios.length / 3);
+      const inicio = (etapaSelecionada - 1) * tamanhoFatia;
+      exerciciosFinais = todosExercicios.slice(inicio, inicio + tamanhoFatia);
+      // Fallback extremo caso a fatia fique vazia
+      if (exerciciosFinais.length === 0) {
+        exerciciosFinais = todosExercicios;
+      }
+    }
+
+    setExerciciosEtapa(exerciciosFinais);
     setIndiceAtual(0);
     setOpcaoSelecionada(null);
   }, [noAtivo, mundoAtual, etapaSelecionada]);
@@ -50,7 +62,15 @@ export function useSessaoExercicio(noAtivo: string, mundoAtual: string, etapaSel
     // Suporta tanto 'correctAnswer' quanto 'respostaCerta' ou 'respostaCorreta'
     const respostaCorretaReal = exercicioAtual?.correctAnswer || exercicioAtual?.respostaCerta || exercicioAtual?.respostaCorreta;
 
-    if (opcaoSelecionada === respostaCorretaReal) {
+    // Validação inteligente e flexível para casos especiais (como a Etapa 3 de som igual)
+    let estaCorreto = false;
+    if (exercicioAtual?.alvo === 'IGUAL' || respostaCorretaReal === 'EQUAL' || respostaCorretaReal === 'IGUAL') {
+      estaCorreto = ['C', '3', 'IGUAL', 'EQUAL', 'c'].includes(opcaoSelecionada);
+    } else {
+      estaCorreto = (opcaoSelecionada === respostaCorretaReal);
+    }
+
+    if (estaCorreto) {
       setFeedback('Correto! +10 XP');
       setXp(anterior => anterior + 10);
     } else {
@@ -77,10 +97,20 @@ export function useSessaoExercicio(noAtivo: string, mundoAtual: string, etapaSel
     const todosExercicios = carregarExercicios();
     const filtrados = todosExercicios.filter((ex: any) => {
       const etapaEx = ex.stage !== undefined ? ex.stage : (ex.etapa !== undefined ? ex.etapa : 1);
-      return etapaEx === etapaSelecionada;
+      return Number(etapaEx) === Number(etapaSelecionada);
     });
 
-    setExerciciosEtapa(filtrados.length > 0 ? filtrados : todosExercicios);
+    let exerciciosFinais = filtrados;
+    if (exerciciosFinais.length === 0 && todosExercicios.length > 0) {
+      const tamanhoFatia = Math.ceil(todosExercicios.length / 3);
+      const inicio = (etapaSelecionada - 1) * tamanhoFatia;
+      exerciciosFinais = todosExercicios.slice(inicio, inicio + tamanhoFatia);
+      if (exerciciosFinais.length === 0) {
+        exerciciosFinais = todosExercicios;
+      }
+    }
+
+    setExerciciosEtapa(exerciciosFinais);
     setIndiceAtual(0);
     setErros(0);
     setVidas(5);

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Cabecalho } from '@/components/Cabecalho';
 import { BarraLateral } from '@/components/BarraLateral';
 import { PrincipalMundo } from '@/components/PrincipalMundo';
@@ -11,7 +11,7 @@ import { nosMundo1 } from '@/data/mundo1';
 import { nosMundo2 } from '@/data/mundo2';
 import { nosMundo3 } from '@/data/mundo3';
 import { nosMundo4 } from '@/data/mundo4';
-import { nosMundo5 } from '@/data/mundo5'; // <-- 1. Importar os nós do Mundo 5
+import { nosMundo5 } from '@/data/mundo5';
 import { useProgressoMundo } from '@/hooks/useProgressoMundo';
 
 export default function Home() {
@@ -25,20 +25,34 @@ export default function Home() {
   const [vistaAtual, setVistaAtual] = useState<'treino' | 'afinador'>('treino');
 
   // Hook centralizado de progresso unificado aqui no nível superior
-  const { registrarConclusaoEtapaEspecifica, obterTextoProgresso } = useProgressoMundo();
+  const { progressoNos, registrarConclusaoEtapaEspecifica, obterTextoProgresso } = useProgressoMundo();
 
-  // Seleciona dinamicamente os nós com base no mundo escolhido e injeta o progresso dinâmico
+  // Seleciona dinamicamente os nós com base no mundo escolhido e injeta o progresso dinâmico reativo
   const nosBrutos = 
     mundoAtual === 'mundo1' ? nosMundo1 : 
     mundoAtual === 'mundo2' ? nosMundo2 : 
     mundoAtual === 'mundo3' ? nosMundo3 : 
     mundoAtual === 'mundo4' ? nosMundo4 : 
-    nosMundo5; // <-- 2. Adicionar suporte ao Mundo 5
+    nosMundo5;
 
-  const nosAtuais = nosBrutos.map(no => ({
-    ...no,
-    progresso: obterTextoProgresso(no.id, no.totalEtapas || 2),
-  }));
+  const nosAtuais = useMemo(() => {
+    return nosBrutos.map(no => {
+      // 1. Normaliza o ID para minúsculas para prevenir falhas por letras maiúsculas (ex: "Altura" vs "altura")
+      const idLower = (no.id || '').toLowerCase();
+
+      // 2. Verifica se é um nó de 3 etapas (incluindo densidade)
+      const isTresEtapas = ['altura', 'duracao', 'timbre', 'intensidade', 'densidade'].includes(idLower);
+
+      // 3. PRIORIDADE ABSOLUTA: Se for de 3 etapas, força 3. Caso contrário, lê do objeto ou assume 2.
+      const totalEtapasDoNo = isTresEtapas ? 3 : ((no as any).totalEtapas || 2);
+
+      return {
+        ...no,
+        // Passa o ID normalizado e o teto correto para o hook de progresso
+        progresso: obterTextoProgresso(idLower, totalEtapasDoNo),
+      };
+    });
+  }, [nosBrutos, progressoNos, obterTextoProgresso]);
 
   // Função para mudar de mundo e redefinir o nó ativo inicial
   const aoSelecionarMundo = (mundo: 'mundo1' | 'mundo2' | 'mundo3' | 'mundo4' | 'mundo5') => {
@@ -53,7 +67,7 @@ export default function Home() {
     } else if (mundo === 'mundo4') {
       setNoAtivo('intervalos');
     } else {
-      setNoAtivo('triades'); // <-- 3. Nó inicial padrão para o Mundo 5
+      setNoAtivo('triades');
     }
   };
 
@@ -103,7 +117,10 @@ export default function Home() {
                   <PainelExercicio 
                     noAtivo={noAtivo as any} 
                     mundoAtual={mundoAtual} 
-                    aoConcluirEtapa={(noId, etapa) => registrarConclusaoEtapaEspecifica(noId, etapa)}
+                    aoConcluirEtapa={(noId, etapa) => {
+                      console.log('[HOME] Registando conclusão de etapa via Painel:', { noId, etapa });
+                      registrarConclusaoEtapaEspecifica(noId, etapa);
+                    }}
                   />
                 )}
               </div>

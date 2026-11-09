@@ -26,8 +26,14 @@ interface PropConstelacaoNeural {
 // Função auxiliar interna para definir o total de etapas de cada nó
 const obterTotalEtapas = (idNo: string): number => {
   const lower = idNo.toLowerCase();
-  // Altura, Duração e Timbre passam a ter 3 etapas; os restantes continuam com 2
-  if (lower.includes('altura') || lower.includes('dura') || lower.includes('timbre')) {
+  // Altura, Duração, Timbre, Intensidade e Densidade passam a ter 3 etapas; os restantes continuam com 2
+  if (
+    lower.includes('altura') || 
+    lower.includes('dura') || 
+    lower.includes('timbre') || 
+    lower.includes('intensidade') || 
+    lower.includes('densidade') // <-- Adicionado aqui!
+  ) {
     return 3;
   }
   return 2;
@@ -71,6 +77,7 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
           {nos.map((noA, indexA) =>
             nos.slice(indexA + 1).map((noB) => {
               const estaAtivo = noAtivo === noA.id || noAtivo === noB.id;
+              
               return (
                 <line
                   key={`${noA.id}-${noB.id}`}
@@ -94,16 +101,19 @@ export function ConstelacaoNeural({ noAtivo, aoSelecionarNo, nos }: PropConstela
           const rotuloFinal = no.rotulo || no.label || no.id;
           const iconeFinal = no.icone || no.icon || ICONES_PADRAO[no.id] || 'radio_button_checked';
           
-          // Obtém o total real de etapas dinamicamente (3 para altura, duração e timbre, 2 para os outros)
+          // Obtém o total real de etapas dinamicamente (agora 3 para altura, duração, timbre, intensidade e densidade)
           const totalEtapasReal = obterTotalEtapas(no.id);
           
-          // Cálculo dinâmico das etapas
+          // Cálculo dinâmico das etapas com suporte robusto a string ou número
           const progressoTexto = no.progresso || no.progress || `0/${totalEtapasReal}`;
           const [concluidasStr] = progressoTexto.split('/');
-          const concluidas = parseInt(concluidasStr) || 0;
+          let concluidas = parseInt(concluidasStr) || 0;
+          if (no.etapasConcluidas !== undefined && no.etapasConcluidas > concluidas) {
+            concluidas = no.etapasConcluidas;
+          }
           
-          // Formata o texto do crachá garantindo que usa o total correto (ex: 0/3)
-          const progressoExibido = `${concluidas}/${totalEtapasReal}`;
+          // Formata o texto do crachá garantindo que usa o total correto (ex: 3/3)
+          const progressoExibido = `${Math.min(concluidas, totalEtapasReal)}/${totalEtapasReal}`;
           
           // Verifica se o nó está totalmente concluído com base no total correto
           const estaCompleto = concluidas >= totalEtapasReal;
