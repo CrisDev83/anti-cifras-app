@@ -5,13 +5,16 @@ import { useState, useEffect } from 'react';
 // Função auxiliar interna para definir o total correto de etapas por nó
 const obterTotalEtapas = (idNo: string): number => {
   const lower = idNo.toLowerCase();
-  // Altura, Duração, Timbre, Intensidade e Densidade têm 3 etapas; os restantes continuam com 2
+  // Altura, Duração, Timbre, Intensidade, Densidade, Ritmo, Melodia e Harmonia têm 3 etapas
   if (
     lower.includes('altura') || 
     lower.includes('dura') || 
     lower.includes('timbre') || 
     lower.includes('intensidade') ||
-    lower.includes('densidade')
+    lower.includes('densidade') ||
+    lower.includes('ritmo') ||
+    lower.includes('melodia') ||
+    lower.includes('harmonia')
   ) {
     return 3;
   }

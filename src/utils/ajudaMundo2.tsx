@@ -30,15 +30,24 @@ export const getWorld2Instruction = (activeNode: string, selectedStage: number, 
       if (selectedStage === 2) {
         return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">RITMO</span>?</>;
       }
+      if (selectedStage === 3) {
+        return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO RÍTMICA</span>?</>;
+      }
       return <>Ouça os dois sons. Qual deles é um <span className="text-primary font-bold">SOM PERCUSSIVO</span>?</>;
     case 'melodia':
       if (selectedStage === 2) {
         return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">MELODIA</span>?</>;
       }
+      if (selectedStage === 3) {
+        return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO MELÓDICA</span>?</>;
+      }
       return <>Ouça os dois sons. Qual deles é uma <span className="text-primary font-bold">NOTA SÓ</span>?</>;
     case 'harmonia':
       if (selectedStage === 2) {
         return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">HARMONIA</span>?</>;
+      }
+      if (selectedStage === 3) {
+        return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO HARMÔNICA</span>?</>;
       }
       return <>Ouça os dois sons. Qual deles traz <span className="text-primary font-bold">VÁRIAS NOTAS JUNTAS</span>?</>;
     default:

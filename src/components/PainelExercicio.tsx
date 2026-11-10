@@ -133,15 +133,24 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
           if (etapaSelecionada === 2) {
             return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">RITMO</span>?</>;
           }
+          if (etapaSelecionada === 3) {
+            return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO RÍTMICA</span>?</>;
+          }
           return <>Ouça os dois sons. Qual deles é um <span className="text-primary font-bold">SOM PERCUSSIVO</span>?</>;
         case 'melodia':
           if (etapaSelecionada === 2) {
             return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">MELODIA</span>?</>;
           }
+          if (etapaSelecionada === 3) {
+            return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO MELÓDICA</span>?</>;
+          }
           return <>Ouça os dois sons. Qual deles é uma <span className="text-primary font-bold">NOTA SÓ</span>?</>;
         case 'harmonia':
           if (etapaSelecionada === 2) {
             return <>Ouça os dois sons. Qual deles representa o elemento <span className="text-primary font-bold">HARMONIA</span>?</>;
+          }
+          if (etapaSelecionada === 3) {
+            return <>Ouça os dois sons. Qual deles apresenta a <span className="text-primary font-bold">VARIAÇÃO HARMÔNICA</span>?</>;
           }
           return <>Ouça os dois sons. Qual deles traz <span className="text-primary font-bold">VÁRIAS NOTAS JUNTAS</span>?</>;
         default:
@@ -179,7 +188,7 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
   };
 
   const noLower = noAtivo.toLowerCase();
-  const mostraSeletorEtapas = eMundoDois || noLower.includes('altura') || noLower.includes('densidade') || noLower.includes('dura') || noLower.includes('intensidade') || noLower.includes('timbre');
+  const mostraSeletorEtapas = eMundoDois || noLower.includes('altura') || noLower.includes('densidade') || noLower.includes('dura') || noLower.includes('intensidade') || noLower.includes('timbre') || noLower.includes('harmonia') || noLower.includes('ritmo') || noLower.includes('melodia');
 
   return (
     <>
@@ -217,8 +226,8 @@ export function PainelExercicio({ noAtivo, mundoAtual = 'mundo1', aoConcluirEtap
                   >
                     E2
                   </button>
-                  {/* Botão E3 ativado para Altura, Duração, Timbre, Intensidade e Densidade */}
-                  {(noLower.includes('altura') || noLower.includes('dura') || noLower.includes('timbre') || noLower.includes('intensidade') || noLower.includes('densidade')) && (
+                  {/* Botão E3 ativado para nós com 3 etapas */}
+                  {(noLower.includes('altura') || noLower.includes('dura') || noLower.includes('timbre') || noLower.includes('intensidade') || noLower.includes('densidade') || noLower.includes('harmonia') || noLower.includes('ritmo') || noLower.includes('melodia')) && (
                     <button
                       type="button"
                       onClick={() => aoSelecionarEtapa(3)}
